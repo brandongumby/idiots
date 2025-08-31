@@ -68,8 +68,15 @@ def get_teamsize(embed):
 #endregion
 
 #region  store_user_roles
-async def store_user_roles(client, user_id, roles, guild_id):
+async def store_user_roles(client, user_id, guild_id):
     try:
+        guild = client.get_guild(guild_id)
+        member = guild.get_member(user_id)
+
+        if not member:  # fallback if not cached
+            member = await guild.fetch_member(user_id)
+
+        roles = member.roles 
         user = await load_user(client, user_id, guild_id)
         role_ids = [role.id for role in roles if not role.is_default()]
 
@@ -1573,6 +1580,7 @@ async def create_acc(client, user_id, display_name, guild_id):
             if user is None:
                 new_user = objects.User(client, display_name, user_id, guild_id, roles=[])
                 await new_user.save()
+                await store_user_roles(client, user_id, guild_id)
                 await cursor.execute("UPDATE users SET qotd_points = ? WHERE user_id = ? AND guild = ?", (0, user_id, guild_id))
                 await client.db.commit()
             else:
@@ -1584,6 +1592,9 @@ async def create_acc(client, user_id, display_name, guild_id):
 #region  load_user
 async def load_user(client, user_id, guild_id):
     try:
+        guild = client.get_guild(guild_id)
+        member = await guild.fetch_member(user_id)
+        await create_acc(client, user_id, member.display_name, guild_id)
         async with client.db.cursor() as cursor:
             await cursor.execute("SELECT data FROM users WHERE user_id = ? AND guild = ?", (user_id, guild_id))
             row = await cursor.fetchone()

@@ -920,7 +920,7 @@ class DropAward(discord.ui.View):
             self.message = message
             self.usr = target_user.achievements.drops
 
-    @discord.ui.button(label="Low drop (approx. <50m)", style=discord.ButtonStyle.blurple, emoji="⬇️", custom_id="low_drop")
+    @discord.ui.button(label="Low (approx. <50m)", style=discord.ButtonStyle.blurple, emoji="⬇️", custom_id="low_drop")
     async def low_drop(self, interaction: discord.Interaction, button: discord.ui.Button):
         try:
             emoji = interaction.client.get_emoji(config.DROP_EMOJI)
@@ -932,7 +932,7 @@ class DropAward(discord.ui.View):
         except Exception as e:
             print(f"low_drop error(DropAward): {e}")
 
-    @discord.ui.button(label="Medium drop (approx. 50m-250m)", style=discord.ButtonStyle.blurple, emoji="🔵", custom_id="med_drop")
+    @discord.ui.button(label="Medium (approx. 50m-250m)", style=discord.ButtonStyle.blurple, emoji="🔵", custom_id="med_drop")
     async def med_drop(self, interaction: discord.Interaction, button: discord.ui.Button):
         try:
             emoji = interaction.client.get_emoji(config.DROP_EMOJI)
@@ -944,7 +944,7 @@ class DropAward(discord.ui.View):
         except Exception as e:
             print(f"med_drop error(DropAward): {e}")
 
-    @discord.ui.button(label="High drop (approx. >250m)", style=discord.ButtonStyle.blurple, emoji="⬆️", custom_id="high_drop")
+    @discord.ui.button(label="High (approx. >250m)", style=discord.ButtonStyle.blurple, emoji="⬆️", custom_id="high_drop")
     async def high_drop(self, interaction: discord.Interaction, button: discord.ui.Button):
         try:
             emoji = interaction.client.get_emoji(config.DROP_EMOJI)

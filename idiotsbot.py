@@ -77,7 +77,7 @@ async def on_message(message):
             message_data = {"message_id": message.id, "content": message.content,"guild": message.guild.id, "user_id": message.author.id, "username": message.author.name, "created_at": message_time_unix}
             
             roles = message.author.roles
-            await functions.store_user_roles(client, message.author.id, roles, message.guild.id)
+            await functions.store_user_roles(client, message.author.id, message.guild.id)
             
             await functions.cache_message(client, message_data)
             await functions.PurgeOldMessage(client)
@@ -148,14 +148,14 @@ async def on_raw_member_remove(payload):
         print(f"on_raw_member_remove error: {e}")
 #endregion
 
-#region avatar update logging
+#region on_member_update
 @client.event
 async def on_member_update(before, after):
     try:
         await functions.create_acc(client, before.id, before.display_name, before.guild.id)
         if after.guild.id == config.GUILD_ID:
             if before.roles != after.roles:
-                await functions.store_user_roles(client, before.id, after.roles, after.guild.id)
+                await functions.store_user_roles(client, before.id, after.guild.id)
             logs_channel = client.get_channel(config.LOGS_CHANNEL)
         
             if before.display_avatar != after.display_avatar:

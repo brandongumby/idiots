@@ -353,21 +353,6 @@ def load_commands(tree, client, TaskClass):
     adjust_data.default_permissions = discord.Permissions(administrator=True)
 #endregion
 
-#region  view points (Context)
-#    @tree.context_menu(name="View Points")
-#    async def view_points(interaction: discord.Interaction, member: discord.Member):
-#        async with client.db.cursor() as cursor:
-#            await cursor.execute("SELECT points FROM users WHERE user = ? AND guild = ?", (member.id, member.guild.id,))
-#            points = await cursor.fetchone()
-#            if points is None:
-#                points = 0
-#
-#            embed = discord.Embed(title=f"{member.name}")
-#            embed.add_field(name="Points:", value=f"{member.mention} has {points[0]} points!")
-#
-#            await interaction.response.send_message(embed=embed, ephemeral=True)
-#endregion
-
 #region  damage_obelisk
     '''
     @tree.command(name="damage_obelisk", description="Apply damage to an obelisk")
@@ -1000,4 +985,20 @@ def load_commands(tree, client, TaskClass):
         except Exception as e:
             print(f"award drop points (Context) error: {e}")
     give_drop.default_permissions = discord.Permissions(manage_messages=True)
+#endregion
+
+#region  view points (Context)
+    @tree.context_menu(name="View Profile")
+    async def view_prof(interaction: discord.Interaction, member: discord.Member):
+        await interaction.response.defer(ephemeral=True)
+        user = await functions.load_user(client, member.id, interaction.guild_id)
+        if user.roles == []:
+            roles = "None logged"
+        else:
+            roles = ""
+            for role in list(user.roles):
+                roles += f"<@&{role}> | "
+            roles = roles.rstrip(" | ")
+        await interaction.followup.send(f"User stats for **{user.name}**\n\n**id:** {user.id}\n**level:** {user.level}    |   **xp:** {user.xp}\n**roles:** {roles}\n**messages:** {user.messages}\n**qotd points:** {user.qotd.points}\n**correct:** {user.qotd.correct}\n**wins:** {user.qotd.wins}\n**top 3:** {user.qotd.top_3}\n**total_questions:** {user.qotd.total_questions}\n**achievement total points:** {user.achievements}\n**skilling:** *points - {user.achievements.skilling.points}, tasks - {user.achievements.skilling.tasks}*\n**combat:** *points - {user.achievements.combat.points}, tasks - {user.achievements.combat.tasks}*\n**clan:** *points - {user.achievements.clan.points}, tasks - {user.achievements.clan.tasks}*\n**drops:** *points - {user.achievements.drops.points}, tasks - {user.achievements.drops.tasks}*", ephemeral=True)
+
 #endregion
