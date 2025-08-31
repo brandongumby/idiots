@@ -25,6 +25,7 @@ class User:
 
     class Achievements:
         def __init__(self):
+            self.tier = ""
             self.skilling = self.Skilling()
             self.combat = self.Combat()
             self.clan = self.Clan()
@@ -76,6 +77,7 @@ class User:
             "messages": self.messages,
             "qotd": vars(self.qotd),
             "achievements": {
+                "tier": self.achievements.tier,
                 "skilling": vars(self.achievements.skilling),
                 "combat": vars(self.achievements.combat),
                 "clan": vars(self.achievements.clan),
@@ -115,6 +117,7 @@ class User:
                 getattr(user.achievements, category).logged = cat_data.get("logged", [])
 
         user.achievements.completed = ach.get("completed", [])
+        user.achievements.tier = ach.get("tier", "")
         return user
         
     async def save(self):
