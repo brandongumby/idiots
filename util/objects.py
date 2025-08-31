@@ -62,6 +62,7 @@ class User:
             def __init__(self):
                 self.tasks = 0
                 self.points = 0
+                self.logged = []
 
 #region  --- serialization ---
     def to_dict(self):
@@ -110,6 +111,8 @@ class User:
             cat_data = ach.get(category, {})
             getattr(user.achievements, category).tasks = cat_data.get("tasks", 0)
             getattr(user.achievements, category).points = cat_data.get("points", 0)
+            if category == "drops":
+                getattr(user.achievements, category).logged = cat_data.get("logged", [])
 
         user.achievements.completed = ach.get("completed", [])
         return user

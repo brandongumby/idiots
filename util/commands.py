@@ -641,22 +641,22 @@ def load_commands(tree, client, TaskClass):
         await interaction.response.send_modal(modals.GiveawayModal(client, TaskClass))
 #endregion
 
-#region  dmg_t1
-    @tree.context_menu(name="Damage Demon")
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def dmg_t1(interaction: discord.Interaction, message: discord.Message):
-        await interaction.response.defer(ephemeral=True)
-        channel_id = interaction.channel.id
-        demon_channel = client.get_channel(channel_id)
-
-        view=myviews.RollDamageTier(client, message, demon_message=None)
-        demon_message = await demon_channel.send(view=view)
-        view.demon_message = demon_message
-
-        await interaction.followup.send("Select the drop tier", ephemeral=True)
-
-    
-    dmg_t1.default_permissions = discord.Permissions(manage_messages=True)
+#region  dmg_t1 -->  @tree.context_menu(name="Damage Demon")
+#    @tree.context_menu(name="Damage Demon")
+#    @discord.app_commands.checks.has_permissions(manage_messages=True)
+#    async def dmg_t1(interaction: discord.Interaction, message: discord.Message):
+#        await interaction.response.defer(ephemeral=True)
+#        channel_id = interaction.channel.id
+#        demon_channel = client.get_channel(channel_id)
+#
+#        view=myviews.RollDamageTier(client, message, demon_message=None)
+#        demon_message = await demon_channel.send(view=view)
+#        view.demon_message = demon_message
+#
+#        await interaction.followup.send("Select the drop tier", ephemeral=True)
+#
+#   
+#    dmg_t1.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
 
 #region  team_status
@@ -986,3 +986,18 @@ def load_commands(tree, client, TaskClass):
     give_ach.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
 
+#region  award drop points (Context)
+    @tree.context_menu(name="Award Drop Points")
+    @discord.app_commands.checks.has_permissions(manage_messages=True)
+    async def give_drop(interaction: discord.Interaction, message: discord.Message):
+        try:
+            target_user = await functions.load_user(client, message.author.id, message.guild.id)
+            view = myviews.DropAward(target_user, message)
+            if message.id in target_user.achievements.drops.logged:
+                await interaction.response.send_message("This drop has already been awarded!", ephemeral=True)
+                return
+            await interaction.response.send_message("What tier drop?", ephemeral=True, view=view)
+        except Exception as e:
+            print(f"award drop points (Context) error: {e}")
+    give_drop.default_permissions = discord.Permissions(manage_messages=True)
+#endregion

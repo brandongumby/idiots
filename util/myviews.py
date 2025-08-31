@@ -911,5 +911,49 @@ class TriviaView(discord.ui.View):
             print(f"create_callback error(TriviaView): {e}")
 #endregion
 
+#region  DropAward menu
+class DropAward(discord.ui.View):
+    def __init__(self, target_user, message):
+            super().__init__(timeout=None)
+            self.value = None
+            self.target_user = target_user
+            self.message = message
+            self.usr = target_user.achievements.drops
 
+    @discord.ui.button(label="Low drop (approx. <50m)", style=discord.ButtonStyle.blurple, emoji="⬇️", custom_id="low_drop")
+    async def low_drop(self, interaction: discord.Interaction, button: discord.ui.Button):
+        try:
+            emoji = interaction.client.get_emoji(config.DROP_EMOJI)
+            await self.message.add_reaction(emoji)
+            self.usr.logged.append(self.message.id)
+            self.usr.points += 3
+            await self.target_user.save()
+            await interaction.response.edit_message(content="You have awarded a LOW tier drop!", view=None)
+        except Exception as e:
+            print(f"low_drop error(DropAward): {e}")
+
+    @discord.ui.button(label="Medium drop (approx. 50m-250m)", style=discord.ButtonStyle.blurple, emoji="🔵", custom_id="med_drop")
+    async def med_drop(self, interaction: discord.Interaction, button: discord.ui.Button):
+        try:
+            emoji = interaction.client.get_emoji(config.DROP_EMOJI)
+            await self.message.add_reaction(emoji)
+            self.usr.logged.append(self.message.id)
+            self.usr.points += 6
+            await self.target_user.save()
+            await interaction.response.edit_message(content="You have awarded a MEDIUM tier drop!", view=None)
+        except Exception as e:
+            print(f"med_drop error(DropAward): {e}")
+
+    @discord.ui.button(label="High drop (approx. >250m)", style=discord.ButtonStyle.blurple, emoji="⬆️", custom_id="high_drop")
+    async def high_drop(self, interaction: discord.Interaction, button: discord.ui.Button):
+        try:
+            emoji = interaction.client.get_emoji(config.DROP_EMOJI)
+            await self.message.add_reaction(emoji)
+            self.usr.logged.append(self.message.id)
+            self.usr.points += 9
+            await self.target_user.save()
+            await interaction.response.edit_message(content="You have awarded a HIGH tier drop!", view=None)
+        except Exception as e:
+            print(f"high_drop error(DropAward): {e}")
+#endregion
 
