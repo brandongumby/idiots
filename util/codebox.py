@@ -28,6 +28,7 @@ class CodeModal(discord.ui.Modal, title="Execute Code"):
                     "cursor": cursor,
                     "default": user,
                     "client": interaction.client,
+                    "guild": interaction.guild,
                     "guild_id": interaction.guild_id,
                     "channel": interaction.channel,
                     "discord": discord,

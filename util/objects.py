@@ -32,6 +32,15 @@ class User:
             self.drops = self.Drops()
             self.completed = []
 
+        def reset(self):
+            self.tier = ""
+            self.completed = []
+            for category in (self.skilling, self.combat, self.clan, self.drops):
+                category.tasks = 0
+                category.points = 0
+                if hasattr(category, "logged"):
+                    category.logged = []  # only exists in Drops
+
         @property
         def total_tasks(self):
             return self.skilling.tasks + self.combat.tasks + self.clan.tasks + self.drops.tasks
