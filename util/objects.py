@@ -1,7 +1,7 @@
 from util import functions
 import json
 
-
+#region  user
 class User:
     def __init__(self, client, name, user_id, guild_id, roles: list):
         self.client = client
@@ -141,8 +141,95 @@ class User:
             await self.client.db.commit()
         except Exception as e:
             print(f"save_user error(objects.py): {e}")
-
-
-    #--->  CREATE UNIQUE INDEX idx_user_guild ON users(user_id, guild);
+#endregion
 #endregion
 
+
+#region  player
+class Player:
+    def __init__(self, client, user_id, name, guild_id):
+        self.client = client
+        self.name = name
+        self.id = user_id
+        self.guild = guild_id
+        self.points = 0
+        self.drops = self.Drops()
+        self.damage = 0
+        self.exhaustion = 0
+        self.buff = None
+
+    class Drops:
+        def __init__(self):
+            #list of message id's for drops
+            self.messages = []
+
+            self.total = 0
+            self.tier1 = 0
+            self.tier2 = 0
+            self.tier3 = 0
+            self.tier4 = 0
+            self.tier5 = 0
+        
+        @property
+        def total(self):
+            return self.tier1 + self.tier2 + self.tier3 + self.tier4 + self.tier5
+
+#region serialization---------
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "id": self.id,
+            "guild": self.guild,
+            "points": self.points,
+            "drops": {
+                "total": self.drops.total,
+                "messages": self.drops.messages,
+                "tier1": self.drops.tier1,
+                "tier2": self.drops.tier2,
+                "tier3": self.drops.tier3,
+                "tier4": self.drops.tier4,
+                "tier5": self.drops.tier5
+            },
+            "damage": self.damage,
+            "exhaustion": self.exhaustion,
+            "buff": self.buff,
+        }
+
+    @classmethod
+    def from_dict(cls, client, data: dict):
+        player = cls(
+            client,
+            data.get("id"),
+            data.get("name", "Unknown"),
+            data["guild"],
+        )
+        player.points = data.get("points", 0)
+        player.damage = data.get("damage", 0)
+        player.exhaustion = data.get("exhaustion", 0)
+        player.buff = data.get("buff", None)
+
+        drops_data = data.get("drops", {})
+        player.drops.total = drops_data.get("total", 0)
+        player.drops.messages = drops_data.get("messages", [])
+        player.drops.tier1 = drops_data.get("tier1", 0)
+        player.drops.tier2 = drops_data.get("tier2", 0)
+        player.drops.tier3 = drops_data.get("tier3", 0)
+        player.drops.tier4 = drops_data.get("tier4", 0)
+        player.drops.tier5 = drops_data.get("tier5", 0)
+
+        return player
+        
+    async def save(self):
+        try:
+            data = json.dumps(self.to_dict())
+            async with self.client.db.cursor() as cursor:
+                await cursor.execute("""
+                    INSERT INTO players (user_id, guild, data)
+                    VALUES (?, ?, ?)
+                    ON CONFLICT(user_id, guild) DO UPDATE SET data=excluded.data
+                """, (self.id, self.guild, data))
+            await self.client.db.commit()
+        except Exception as e:
+            print(f"save_player error(objects.py): {e}")
+#endregion
+#endregion

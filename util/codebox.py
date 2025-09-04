@@ -16,8 +16,9 @@ class CodeModal(discord.ui.Modal, title="Execute Code"):
 
     async def on_submit(self, interaction: discord.Interaction):
         try:
+            await interaction.response.defer(ephemeral=True, thinking=True)
             if interaction.user.id != config.OWNER:
-                await interaction.response.send_message("⛔ You cannot use this.", ephemeral=True)
+                await interaction.followup.send("⛔ You cannot use this.", ephemeral=True)
                 return
 
             user = await functions.load_user(interaction.client, interaction.user.id, interaction.guild_id)
@@ -46,10 +47,13 @@ class CodeModal(discord.ui.Modal, title="Execute Code"):
                     func = env["_func"]
 
                     with redirect_stdout(stdout):
-                        result = await func()
+                        try:
+                            result = await func()
+                        except Exception:
+                            error = traceback.format_exc()
                 except Exception:
                     error = traceback.format_exc()
-                    return await interaction.response.send_message(f"Error: ```\n{error}\n```", ephemeral=True)
+                    return await interaction.followup.send(f"Error: ```\n{error}\n```", ephemeral=True)
 
                 output = stdout.getvalue()
                 if result is not None:
@@ -62,6 +66,6 @@ class CodeModal(discord.ui.Modal, title="Execute Code"):
                 if len(output) > 1900:
                     output = output[:1900] + "... [truncated]"
 
-                await interaction.response.send_message(f"```py\n{output}\n```", ephemeral=True)
+                await interaction.followup.send(f"```py\n{output}\n```", ephemeral=True)
         except Exception as e:
             print(f"CodeModal error: {e}")

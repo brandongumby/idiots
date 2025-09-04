@@ -1059,7 +1059,7 @@ async def force_qotd(client):
             qotd_view = myviews.QotdView(client, tagged_answers, correct, difficulty)
 
             try:
-                image = Image.open("qotd.png")
+                image = Image.open("assets/qotd.png")
             except Exception as e:
                 print(e)
             editor = Editor(image)
@@ -1181,7 +1181,7 @@ async def update_leaderboard(client):
                     })
                     count += 1
 
-                image = Image.open("leaderboard.png")
+                image = Image.open("assets/leaderboard.png")
                 editor = Editor(image)
 
                 #region no points
@@ -1433,7 +1433,7 @@ async def send_qotd(client):
             qotd_view = myviews.QotdView(client, tagged_answers, correct, difficulty)
 
             try:
-                image = Image.open("qotd.png")
+                image = Image.open("assets/qotd.png")
             except Exception as e:
                 print(e)
             editor = Editor(image)
@@ -1606,9 +1606,135 @@ async def load_user(client, user_id, guild_id):
         print(f"load_user error: {e}")
 #endregion
 
+#region  load_player
+async def load_player(client, user_id, guild_id):
+    try:
+        guild = client.get_guild(guild_id)
+        member = await guild.fetch_member(user_id)
+        await create_player(client, user_id, member.display_name, guild_id)
+        async with client.db.cursor() as cursor:
+            await cursor.execute("SELECT data FROM players WHERE user_id = ? AND guild = ?", (user_id, guild_id))
+            row = await cursor.fetchone()
+        if row:
+            data = json.loads(row[0])
+            return objects.Player.from_dict(client, data)
+        return None
+    except Exception as e:
+        print(f"load_user error: {e}")
+#endregion
+
 #region chunk_list
 def chunk_list(lst, n):
     return [lst[i:i+n] for i in range(0, len(lst), n)]
 #endregion
 
+#region  send_usercard
+async def fetch_usercard(client, member, guild_id):
+    try:
+        user = await load_user(client, member.id, guild_id)
+
+        usercards = [
+            "assets/usercards/usrcard1.png",
+            "assets/usercards/usrcard2.png",
+            "assets/usercards/usrcard3.png",
+            "assets/usercards/usrcard4.png",
+            "assets/usercards/usrcard5.png",
+            "assets/usercards/usrcard6.png",
+        ]
+        selected = random.choice(usercards)
+        image = Image.open(selected)
+
+        editor = Editor(image)
+
+        #region added text
+
+        #add name
+        name = user.name
+
+        if len(name) > 16:
+            name = name[:16]
+        font = Font.poppins(size=30, variant="bold")
+        editor.text((110, 23), name, font=font, color="white")
+
+        #add id
+        id = str(user.id)
+        font = Font.poppins(size=20)
+        editor.text((535, 38), id, font=font, color="white")
+
+        #add level
+        level = str(user.level)
+        font = Font.poppins(size=20)
+        editor.text((350, 90), level, font=font, color="white")
+
+        #add xp
+        xp = str(user.xp)
+        font = Font.poppins(size=20)
+        editor.text((530, 91), xp, font=font, color="white")
+
+        #add roles
+
+        #add questions answered
+        qa = str(user.qotd.total_questions)
+        font = Font.poppins(size=20)
+        editor.text((255, 322), qa, font=font, color="white")
+
+        #add correct
+        correct = str(user.qotd.correct)
+        font = Font.poppins(size=20)
+        editor.text((120, 370), correct, font=font, color="white")
+
+        #add points
+        points = str(user.qotd.points)
+        font = Font.poppins(size=20)
+        editor.text((255, 370), points, font=font, color="white")
+
+        #add wins
+        wins = str(user.qotd.wins)
+        font = Font.poppins(size=20)
+        editor.text((120, 416), wins, font=font, color="white")
+
+        #add top 3
+        top3 = str(user.qotd.top_3)
+        font = Font.poppins(size=20)
+        editor.text((255, 416), top3, font=font, color="white")
+
+        #add avatar
+        avatar_url = member.display_avatar.url  # always works, even if no custom avatar
+        avatar = await load_image_async(avatar_url)  # EasyPIL helper to fetch and load
+        avatar_editor = Editor(avatar).resize((175, 175)).circle_image()  # crop circle
+
+        editor.paste(avatar_editor, (30, 60))
+
+
+
+
+
+        #endregion
+
+        buffer = io.BytesIO()
+        editor.image.save(buffer, format="PNG")
+        buffer.seek(0)
+
+        file = discord.File(fp=buffer, filename="modified_image.png")
+
+        return file
+
+    except Exception as e:
+        print(f"send_usercard error(function): {e}")
+#endregion
+
+#region  create_player (new)
+async def create_player(client, user_id, display_name, guild_id):
+    try:
+        async with client.db.cursor() as cursor:
+            await cursor.execute("SELECT data FROM players WHERE user_id = ? AND guild =?", (user_id, guild_id))
+            user = await cursor.fetchone()
+            if user is None:
+                new_user = objects.Player(client, display_name, user_id, guild_id)
+                await new_user.save()
+            else:
+                return
+    except Exception as e:
+        print(f"create_player error: {e}")
+#endregion
 

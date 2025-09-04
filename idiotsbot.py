@@ -39,16 +39,26 @@ class aclient(discord.Client):
             print(f'{client.user} is online!')
 
             async with self.db.cursor() as cursor:
-                await cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id INTEGER, data TEXT, guild INTEGER, qotd_points INTEGER, UNIQUE(user_id, guild))")
+                #remove these vv
                 await cursor.execute("CREATE TABLE IF NOT EXISTS bosses (team STRING, level INTEGER, hp INTEGER, guild INTEGER, name STRING, debuff STRING, channel_id INTEGER, stats TEXT)")
-                await cursor.execute("CREATE TABLE IF NOT EXISTS tickets (user INTEGER, guild INTEGER, status STRING)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS spotlight (days INTEGER, guild INTEGER, boss STRING)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS exhaustion (username STRING, user INTEGER, attacks INTEGER, exhausted INTEGER, stats TEXT)")
+
+                #Database for events
+                await cursor.execute("CREATE TABLE IF NOT EXISTS players (user_id INTEGER, data TEXT, guild INTEGER, UNIQUE(user_id, guild))")
+
+                #User data
+                await cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id INTEGER, data TEXT, guild INTEGER, qotd_points INTEGER, UNIQUE(user_id, guild))")
+
+                #system databases
+                await cursor.execute("CREATE TABLE IF NOT EXISTS tickets (user INTEGER, guild INTEGER, status STRING)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS voice_channels (channel_id INTEGER, guild INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS react (message_id INTEGER, role INTEGER, emoji STRING)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS giveaways (message_id INTEGER, host INTEGER, participants TEXT, prize STRING, end_time INTEGER, description STRING, finished STRING, winners INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS messages (user INTEGER, username STRING, message_id INTEGER, guild INTEGER, content STRING, created_at INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS animals (animal STRING, guild INTEGER, breed1 STRING, traita1 STRING, traita2 STRING, traita3 STRING, breed2 STRING, traitb1 STRING, traitb2 STRING, traitb3 STRING, owner STRING, lender STRING)")
+                
+                #Question of the day no-repeat and persistence databases
                 await cursor.execute("CREATE TABLE IF NOT EXISTS questions (question STRING, guild INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS qotd (message_id STRING, guild INTEGER, tagged TEXT, correct TEXT, difficulty TEXT, results TEXT, answered TEXT, gratz_message_id STRING)")
                 await client.db.commit()

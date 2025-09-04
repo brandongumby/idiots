@@ -10,13 +10,13 @@ import requests
 import io
 
 def load_commands(tree, client, TaskClass):
+#system commands-------------------------------
 #region  HELP
     @tree.command(name="help", description="shows how to view idiots bot commands")
     async def help(interaction: discord.Interaction):
 
         await interaction.response.send_message("type `/` then select idiots bot from the left side\n⬅️ or below (mobile) ⬇️ to view the commands", ephemeral=True)
 #endregion
-
 #region  add_react  add reaction role
     @tree.command(name="add_react", description="Add a reaction role (use in same channel as message)")
     @app_commands.describe(message_id = "enter the message id")
@@ -41,7 +41,73 @@ def load_commands(tree, client, TaskClass):
             print(e)
     add_react.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
+#region  clear command
+    @tree.command(name="clear", description="purge an amount of messages")
+    @app_commands.describe(amount_to_clear = "How many messages do you want to clear?")
+    @discord.app_commands.checks.has_permissions(manage_messages=True)
+    async def clear(interaction: discord.Interaction, amount_to_clear: int):
+        await interaction.response.defer()
+        await interaction.channel.purge(limit=amount_to_clear + 1)
 
+    clear.default_permissions = discord.Permissions(manage_messages=True)
+#endregion
+#region  ticket creates ticket embed
+    @tree.command(name="ticket", description="Creates a ticket embed.")
+    @discord.app_commands.checks.has_permissions(manage_messages=True)
+    async def ticket(interaction: discord.Interaction):
+        tembed = discord.Embed(title="Create a Ticket!")
+        tembed.add_field(name="Welcome to support tickets", value="To create a ticket click the button below\nAfter that it will create a ticket channel for you to be able to contact the Admin team directly.", inline=False)
+        tembed.add_field(name="Ticket Use:", value=f"* Report any issues\n* Give us any feedback\n* Report discord users\n* Ask questions\n* Any other support you may need with the discord or clan")
+        await interaction.response.send_message(embed=tembed, view=myviews.CreateTicket(client))
+
+    ticket.default_permissions = discord.Permissions(manage_messages=True)
+#endregion
+#region  giveaway
+    @tree.command(name="giveaway", description="creates a giveaway")
+    async def giveaway(interaction: discord.Interaction):
+        await interaction.response.send_modal(modals.GiveawayModal(client, TaskClass))
+#endregion
+#region  wiki
+    @tree.command(name="wiki", description="link to rs wiki")
+    @app_commands.describe(search = "What to look up")
+    async def wiki(interaction: discord.Interaction, search: str):
+        query = search.replace(' ', '%20')
+    
+        # Create the search URL
+        url = f"https://runescape.wiki/w/Special:Search?search={query}&go=Go"
+        
+        # Send an HTTP GET request to the URL
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            # If the request is successful, send the search URL to the Discord channel
+            await interaction.response.send_message(f"Click here to search for **{search}**: [**Search Results**](<{url}>)")
+        else:
+            # If the request fails, send an error message
+            await interaction.response.send_message("Something went wrong while searching. Please try again later.")
+#endregion
+#region  dropchance
+    @tree.command(name="dropchance", description="simulates pet and item drops")
+    async def dropchance(interaction: discord.Interaction):
+        try:
+            await interaction.response.send_modal(modals.DropChance())
+        except Exception as e:
+            print(e)
+
+#endregion
+#region  exec
+    @tree.command(name="exec", description="Execute Python code")
+    @discord.app_commands.checks.has_permissions(administrator=True)
+    async def exec(interaction: discord.Interaction):
+        if interaction.user.id != config.OWNER:
+            await interaction.response.send_message("⛔ You cannot use this.", ephemeral=True)
+            return
+
+        await interaction.response.send_modal(codebox.CodeModal())
+    exec.default_permissions = discord.Permissions(administrator=True)
+#endregion
+
+#pof commands----------------------------------
 #region  update_pof lender
     @tree.command(name="update_pof", description="Updates POF Lender")
     @app_commands.describe(animal = "enter animal type")
@@ -82,7 +148,6 @@ def load_commands(tree, client, TaskClass):
         
     update_pof.default_permissions = discord.Permissions(administrator=True)
 #endregion
-
 #region  creates poflend embed
     @tree.command(name="pof_lend", description="Creates a pof lender embed.")
     @discord.app_commands.checks.has_permissions(manage_messages=True)
@@ -95,7 +160,6 @@ def load_commands(tree, client, TaskClass):
 
     pof_lend.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
-
 #region  add_animal to poflend system
     @tree.command(name="add_animal", description="add new animal pair to the pof lending system")
     @app_commands.describe(animal = "enter animal type")
@@ -150,29 +214,7 @@ def load_commands(tree, client, TaskClass):
     add_animal.default_permissions = discord.Permissions(administrator=True)
 #endregion
 
-#region  clear command
-    @tree.command(name="clear", description="purge an amount of messages")
-    @app_commands.describe(amount_to_clear = "How many messages do you want to clear?")
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def clear(interaction: discord.Interaction, amount_to_clear: int):
-        await interaction.response.defer()
-        await interaction.channel.purge(limit=amount_to_clear + 1)
-
-    clear.default_permissions = discord.Permissions(manage_messages=True)
-#endregion
-
-#region  ticket creates ticket embed
-    @tree.command(name="ticket", description="Creates a ticket embed.")
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def ticket(interaction: discord.Interaction):
-        tembed = discord.Embed(title="Create a Ticket!")
-        tembed.add_field(name="Welcome to support tickets", value="To create a ticket click the button below\nAfter that it will create a ticket channel for you to be able to contact the Admin team directly.", inline=False)
-        tembed.add_field(name="Ticket Use:", value=f"* Report any issues\n* Give us any feedback\n* Report discord users\n* Ask questions\n* Any other support you may need with the discord or clan")
-        await interaction.response.send_message(embed=tembed, view=myviews.CreateTicket(client))
-
-    ticket.default_permissions = discord.Permissions(manage_messages=True)
-#endregion
-
+#teamforming commands--------------------------
 #region  teamforming embed command
     @tree.command(name="team", description="Creates a teamforming dropdown post.")
     @discord.app_commands.checks.has_permissions(manage_messages=True)
@@ -184,7 +226,6 @@ def load_commands(tree, client, TaskClass):
 
     team.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
-
 #region  add_user for teamforming
     @tree.command(name="add_user", description="adds user to teamforming post")
     @app_commands.describe(message_id = "Enter the message id")
@@ -241,7 +282,6 @@ def load_commands(tree, client, TaskClass):
         else:
             await interaction.response.send_message(f"You don't have permissions to add/remove with this form!", ephemeral=True)
 #endregion
-
 #region  remove_user for teamforming
     @tree.command(name="remove_user", description="removes user from teamforming post")
     @app_commands.describe(message_id = "Enter the message id")
@@ -302,461 +342,7 @@ def load_commands(tree, client, TaskClass):
             await interaction.response.send_message(f"You don't have permissions to add/remove with this form!", ephemeral=True)
 #endregion
 
-#region  adjust_data
-    @tree.command(name="adjust_data", description="adjust data in database")
-    @app_commands.describe(table_name = "enter table name")
-    @app_commands.choices(table_name=functions.generate_table_choices())
-    @app_commands.describe(identifier = "enter data identifier to access correct row")
-    @app_commands.choices(identifier=[
-        app_commands.Choice(name="user", value="user"),
-        app_commands.Choice(name="animal", value="animal"),
-        app_commands.Choice(name="team", value="team"),
-        app_commands.Choice(name="message_id", value="message_id"),
-    ])
-    @app_commands.describe(identifier_data = "enter identifier data")
-    @app_commands.describe(identifier_type = "Type of data for identifier")
-    @app_commands.choices(identifier_type=[
-        app_commands.Choice(name="STRING", value="True"),
-        app_commands.Choice(name="INTEGER", value="False")
-    ])
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def adjust_data(interaction: discord.Interaction, table_name: str, identifier: str, identifier_data: str, identifier_type: str):
-        column_list = []
-        exclude_columns = {"user", "guild", "username", "user_id", "message_id", "animal", "owner", "correct", "questions", "streak"}
-        if identifier_type == "False":
-            identifier_data = int(identifier_data)
-        if table_name == "animals":
-            column_list = ["breed1-2", "traita1-a3", "traitb1-b3"]
-        elif table_name == "bosses":
-            column_list = ['level', 'hp', 'debuff', 'channel_id']
-        elif table_name == "gamba":
-            column_list = ['balance', 'username', 'in_game', 'highest']
-        else:
-            async with client.db.cursor() as cursor:
-                await cursor.execute(f"PRAGMA table_info({table_name})")
-                rows = await cursor.fetchall()
-                for row in rows:
-                    column_name = row[1]  # The column name is in the second position of the row
-                    if column_name in exclude_columns:
-                        print(f"Excluding column: {column_name}")
-                    else:
-                        column_list.append(column_name)
-        total_characters = sum(len(word) for word in column_list)
-        if total_characters > 43:
-            column_list = ["too many columns"]
-        try:
-            #await interaction.response.send_message(f"{column_list}", ephemeral=True)
-            await interaction.response.send_modal(modals.DataUpdateModal(client, table_name, identifier_data, identifier, column_list))
-        except Exception as e:
-            print(f"error sending modal: {e}")
-
-    adjust_data.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
-#region  damage_obelisk
-    '''
-    @tree.command(name="damage_obelisk", description="Apply damage to an obelisk")
-    @app_commands.describe(tier = "enter the damage tier of the broadcast")
-    @app_commands.choices(tier=[
-        app_commands.Choice(name="Tier 1: 1m-49m", value=1),
-        app_commands.Choice(name="Tier 2: 50-99m", value=2),
-        app_commands.Choice(name="Tier 3: 100-199m", value=3),
-        app_commands.Choice(name="Tier 4: 200-499m", value=4),
-        app_commands.Choice(name="Tier 5: 500m+", value=5),
-    ])
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def damage_obelisk(interaction: discord.Interaction, tier: int):
-        await interaction.response.defer(ephemeral=True)
-        async with client.db.cursor() as cursor:
-
-                team = "Obelisk"
-                await cursor.execute("SELECT hp FROM bosses WHERE team = ? AND guild = ?", (team, interaction.guild.id,))
-                hp = await cursor.fetchone()
-                await cursor.execute("SELECT name FROM bosses WHERE team = ? AND guild = ?", (team, interaction.guild.id,))
-                name = await cursor.fetchone()
-                await cursor.execute("SELECT level FROM bosses WHERE team = ? AND guild = ?", (team, interaction.guild.id,))
-                level = await cursor.fetchone()
-
-                hp = hp[0]
-                name = name[0]
-                level = level[0]
-                channel_id = config.OBELISK_CHANNEL
-                target_channel = client.get_channel(channel_id)
-                min_hit = 1
-                if tier == 3:
-                       min_hit = 10
-                if tier == 4:
-                       min_hit = 20
-                if tier == 5:
-                       min_hit = 40
-                base_hit = random.randint(min_hit, (tier * 20))
-
-                if base_hit >= hp:
-                        new_hp = (level * 50)
-                        await cursor.execute("UPDATE bosses SET hp = ? WHERE team = ? AND guild = ?", (new_hp, team, interaction.guild.id,))
-                        await client.db.commit()
-                        for item in config.team_list:
-                               if item[1] == 0:
-                                      await target_channel.send(f"**Error:** *Team `{item[0]}` is missing a `channel_id`!*")
-                                      continue
-                               await functions.send_debuffs(item, client)
-                               await functions.send_demon_view(item, client)
-
-
-                        dmgembed = discord.Embed(title=f"Obelisk Destroyed!", description=f"")
-                        dmgembed.set_thumbnail(url="https://i.imgur.com/jOKSDZK.png")
-                        dmgembed.add_field(name="", value=f"**{name}** took **{base_hit}** damage and has been destroyed!", inline=False)
-                        dmgembed.add_field(name="Demon Buff Aura", value=f"After being destroyed, it explodes and releases a wave of buffs over the Demons.\n*The Obelisk reverts back to its original state.*", inline=False)
-
-                        await target_channel.send(f"<@&1267465391865860177>", embed=dmgembed)
-                        await functions.send_obelisk_view(client)
-                        await interaction.followup.send(f"Damage Obelisk Sent", ephemeral=True)
-
-                else:
-                
-                        new_hp = (hp - base_hit)
-
-                        await cursor.execute("UPDATE bosses SET hp = ? WHERE team = ? AND guild = ?", (new_hp, team, interaction.guild.id,))
-                        await client.db.commit()
-
-                        dmgembed = discord.Embed(title=f"Obelisk Damaged!", description=f"")
-                        dmgembed.set_thumbnail(url="https://i.imgur.com/jOKSDZK.png")
-                        dmgembed.add_field(name="", value=f"**{name}** took **{base_hit}** damage and now has **{new_hp} HP** remaining!", inline=False)
-
-                        await target_channel.send(embed=dmgembed)
-                        await functions.send_obelisk_view(client)
-                        await interaction.followup.send(f"Damage Obelisk Sent", ephemeral=True)
-    
-    damage_obelisk.default_permissions = discord.Permissions(manage_messages=True)
-    '''
-#endregion
-
-#region  add_demon
-    @tree.command(name="add_demon", description="add new discord demon")
-    @app_commands.describe(team = "enter team name (case sensitive)")
-    @app_commands.describe(name = "enter Boss Name")
-    @app_commands.describe(level = "enter team size to determine level and hp")
-    @app_commands.describe(channel_id = "enter teams channel id (put 0 if unsure)")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def add_demon(interaction: discord.Interaction, team: str, name: str, level: int, channel_id: str):
-        await interaction.response.defer()
-        async with client.db.cursor() as cursor:
-                channel_id = int(channel_id)
-                hp = (level * 500)
-                team_stats = {
-                            "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "misses": 0, "highest": 0, "total attacks": 0, "spotlight rolls": 0, "hits": 0
-                            }
-                team_stats = json.dumps(team_stats)
-                await cursor.execute("INSERT INTO bosses (team, level, hp, guild, name, debuff, channel_id, stats) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (team, level, hp, interaction.guild.id, name, "None", channel_id, team_stats))
-                await client.db.commit()
-
-                bossembed = discord.Embed(title=f"Demon Summoned!", description=f"Team name: {team}\nDemon name: {name}\nHP: {hp}")
-                bossembed.set_thumbnail(url="https://i.imgur.com/sIiIux4.png")
-                bossembed.add_field(name="", value=f"I have summoned the Demon {name} for you!")
-                await interaction.followup.send(embed=bossembed)
-
-    add_demon.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
-#region  add_obelisk
-    @tree.command(name="add_obelisk", description="add new discord demon debuff obelisk")
-    @app_commands.describe(level = "enter Obelisk level (# of demonlords)")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def add_obelisk(interaction: discord.Interaction, level: int):
-        await interaction.response.defer()
-        async with client.db.cursor() as cursor:
-                team = "Obelisk"
-                hp = (50 * level)
-                name = "Obelisk"
-                await cursor.execute("INSERT INTO bosses (team, level, hp, guild, name, debuff) VALUES (?, ?, ?, ?, ?, ?)", (team, level, hp, interaction.guild.id, name, "None",))
-                await client.db.commit()
-
-                bossembed = discord.Embed(title=f"Obelisk Summoned!", description=f"A Debuff Obelisk appears")
-                bossembed.set_thumbnail(url="https://i.imgur.com/sIiIux4.png")
-                bossembed.add_field(name="", value=f"I have summoned the Obelisk for you!")
-                await interaction.followup.send(embed=bossembed)
-
-    add_obelisk.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
-#region  view_obelisk
-    @tree.command(name="view_obelisk", description="View the current state of the obelisk")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def view_obelisk(interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=True)
-        try:
-            await functions.viewObelisk(client)
-        except Exception as e:
-            print(e)
-        await interaction.followup.send("Obelisk view sent to obelisk channel", ephemeral=True)
-
-    view_obelisk.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
-#region  view_demon_m
-    @tree.command(name="view_demon_m", description="View the current state of one of the demons")
-    @app_commands.describe(team = "choose team name")
-    @app_commands.choices(team=functions.generate_team_choices())
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def view_demon_m(interaction: discord.Interaction, team: str):
-        async with client.db.cursor() as cursor:
-            await cursor.execute("SELECT hp, name, level, debuff FROM bosses WHERE team = ?", (team,))
-            hp, name, level, debuff = await cursor.fetchone()
-
-            if hp < 0:
-                  hp = 0
-
-            boss_data = {
-                 "hp": hp,
-                 "name": name,
-                 "debuff": debuff,
-                 "max_hp": (level * 1000),
-                 "percentage": ((hp / (level * 1000)) * 100),
-            }
-
-            background = Editor(Canvas((900, 300), color="#141414"))
-            profile_picture = await load_image_async(str("https://pngimg.com/uploads/demon/demon_PNG21.png"))
-            profile = Editor(profile_picture).resize((150, 150)).circle_image()
-
-            poppins = Font.poppins(size=40)
-            poppins_small = Font.poppins(size=30)
-
-            card_right_shape = [(600, 0), (750, 300), (900, 300), (900, 0)]
-
-            background.polygon(card_right_shape, color="#880808")
-            background.paste(profile, (30, 30))
-
-            background.rectangle((30, 220), width=650, height=40, color="#880808", outline="#FFFFFF", radius=20)
-            background.bar((30, 220), max_width=650, height=40, percentage=boss_data["percentage"], color="#000000", outline="#FFFFFF", radius=20)
-
-            background.text((200, 40), boss_data["name"], font=poppins, color="#FFFFFF")
-
-            background.rectangle((200, 100), width=350, height=2, fill="#880808")
-            background.text(
-                 (200, 130),
-                 f"Team - {team}  |  HP - {boss_data['hp']}/{boss_data['max_hp']}",
-                 font = poppins_small,
-                 color="#FFFFFF",
-            )
-            background.text(
-                 (200, 170),
-                 f"Demon Buff: {boss_data['debuff']}",
-                 font = poppins_small,
-                 color="#880808",
-            )
-
-            file = discord.File(fp=background.image_bytes, filename="demonstats.png")
-            await interaction.response.send_message(file=file)
-
-    view_demon_m.default_permissions = discord.Permissions(manage_messages=True)
-#endregion
-
-#region  view_demon (ephemeral)
-    @tree.command(name="view_demon", description="View the current state of one of the demons")
-    @app_commands.describe(team = "choose team name")
-    @app_commands.choices(team=functions.generate_team_choices())
-    async def view_demon(interaction: discord.Interaction, team: str):
-        async with client.db.cursor() as cursor:
-            await cursor.execute("SELECT hp, name, level, debuff FROM bosses WHERE team = ?", (team,))
-            hp, name, level, debuff = await cursor.fetchone()
-
-            if hp < 0:
-                  hp = 0
-
-            boss_data = {
-                 "hp": hp,
-                 "name": name,
-                 "debuff": debuff,
-                 "max_hp": (level * 1000),
-                 "percentage": ((hp / (level * 1000)) * 100),
-            }
-
-            background = Editor(Canvas((900, 300), color="#141414"))
-            profile_picture = await load_image_async(str("https://pngimg.com/uploads/demon/demon_PNG21.png"))
-            profile = Editor(profile_picture).resize((150, 150)).circle_image()
-
-            poppins = Font.poppins(size=40)
-            poppins_small = Font.poppins(size=30)
-
-            card_right_shape = [(600, 0), (750, 300), (900, 300), (900, 0)]
-
-            background.polygon(card_right_shape, color="#880808")
-            background.paste(profile, (30, 30))
-
-            background.rectangle((30, 220), width=650, height=40, color="#880808", outline="#FFFFFF", radius=20)
-            background.bar((30, 220), max_width=650, height=40, percentage=boss_data["percentage"], color="#000000", outline="#FFFFFF", radius=20)
-
-            background.text((200, 40), boss_data["name"], font=poppins, color="#FFFFFF")
-
-            background.rectangle((200, 100), width=350, height=2, fill="#880808")
-            background.text(
-                 (200, 130),
-                 f"Team - {team}  |  HP - {boss_data['hp']}/{boss_data['max_hp']}",
-                 font = poppins_small,
-                 color="#FFFFFF",
-            )
-            background.text(
-                 (200, 170),
-                 f"Demon Buff: {boss_data['debuff']}",
-                 font = poppins_small,
-                 color="#880808",
-            )
-
-            file = discord.File(fp=background.image_bytes, filename="demonstats.png")
-            await interaction.response.send_message(file=file, ephemeral=True)
-#endregion
-
-#region  check_team
-    @tree.command(name="check_team", description="checks a team's database entry")
-    @app_commands.describe(team = "enter team name")
-    @app_commands.choices(team=functions.generate_team_choices())
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def check_team(interaction: discord.Interaction, team: str):
-           async with client.db.cursor() as cursor:
-                await cursor.execute("SELECT team, level, hp, guild, name, debuff, channel_id FROM bosses WHERE team = ?", (team,))
-                row = await cursor.fetchone()
-                await interaction.response.send_message(f"**Team Data:**\nteam: **{row[0]}**\nlevel: **{row[1]}**\nhp: **{row[2]}**\nguild: **{row[3]}**\nname: **{row[4]}**\ndebuff: **{row[5]}**\nchannel_id: **{row[6]}**", ephemeral=True)
-
-    check_team.default_permissions = discord.Permissions(manage_messages=True)
-#endregion
-
-#region  giveaway
-    @tree.command(name="giveaway", description="creates a giveaway")
-    async def giveaway(interaction: discord.Interaction):
-        await interaction.response.send_modal(modals.GiveawayModal(client, TaskClass))
-#endregion
-
-#region  dmg_t1 -->  @tree.context_menu(name="Damage Demon")
-#    @tree.context_menu(name="Damage Demon")
-#    @discord.app_commands.checks.has_permissions(manage_messages=True)
-#    async def dmg_t1(interaction: discord.Interaction, message: discord.Message):
-#        await interaction.response.defer(ephemeral=True)
-#        channel_id = interaction.channel.id
-#        demon_channel = client.get_channel(channel_id)
-#
-#        view=myviews.RollDamageTier(client, message, demon_message=None)
-#        demon_message = await demon_channel.send(view=view)
-#        view.demon_message = demon_message
-#
-#        await interaction.followup.send("Select the drop tier", ephemeral=True)
-#
-#   
-#    dmg_t1.default_permissions = discord.Permissions(manage_messages=True)
-#endregion
-
-#region  team_status
-    @tree.command(name="team_status", description="view the current status of teams demons")
-    @discord.app_commands.checks.has_permissions(manage_messages=True)
-    async def team_status(interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=True)
-        async with client.db.cursor() as cursor:
-            await cursor.execute("SELECT hp, team, level FROM bosses WHERE guild = ? ORDER BY (hp / (level * 10)) ASC LIMIT 10", (interaction.guild.id,))
-            data = await cursor.fetchall()
-            if data:
-                lbembed = discord.Embed(title="Current Demon Leaderboards")
-                count = 0
-                for table in data:
-                    if table[1] == "Obelisk":
-                        continue
-                    count += 1
-                    lbembed.add_field(name=f"{count}. {table[1]} - {table[0]} HP remaining *({round((table[0] / (table[2] * 10)), 1)}% left)*", value=f"", inline=False)
-                return await interaction.followup.send(embed=lbembed, ephemeral=True)
-            return await interaction.followup.send("Leaderboards are currently empty", ephemeral=True)
-
-    team_status.default_permissions = discord.Permissions(manage_messages=True)
-#endregion
-
-#region  roll_demon
-    @tree.command(name="roll_demon", description="roll tier 1 demon for set amount of times (MAX 24)")
-    @app_commands.describe(team = "choose team name")
-    @app_commands.choices(team=functions.generate_team_choices())
-    @app_commands.describe(amount = "how many rolls?")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def roll_demon(interaction: discord.Interaction, team: str, amount: int):
-        await interaction.response.defer()
-        guild = interaction.guild.id
-        payload = [team, 1, 0, guild]
-        total_hit = 0
-        multidemonembed = discord.Embed(title="Multiple Demon Rolls")
-        #return_payload = [has_hit, hit]
-        try:
-            for number in range(amount):
-                return_payload = await functions.DamageDemonMulti(client, payload)
-                has_hit, hit = return_payload
-                if has_hit:
-                    multidemonembed.add_field(name=f"{number + 1}. Hit: {hit}", value="", inline=True)
-                    total_hit += hit
-                else:
-                    multidemonembed.add_field(name=f"{number + 1}. *Missed*", value="", inline=True)
-            multidemonembed.add_field(name="", value=f"Total damage: **{total_hit}**", inline=False)
-            await functions.send_demon_view_multi(team, client)
-        except Exception as e:
-            print(e)
-        
-        await interaction.followup.send(embed=multidemonembed)
-
-    roll_demon.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
-#region  wiki
-    @tree.command(name="wiki", description="link to rs wiki")
-    @app_commands.describe(search = "What to look up")
-    async def wiki(interaction: discord.Interaction, search: str):
-        query = search.replace(' ', '%20')
-    
-        # Create the search URL
-        url = f"https://runescape.wiki/w/Special:Search?search={query}&go=Go"
-        
-        # Send an HTTP GET request to the URL
-        response = requests.get(url)
-        
-        if response.status_code == 200:
-            # If the request is successful, send the search URL to the Discord channel
-            await interaction.response.send_message(f"Click here to search for **{search}**: [**Search Results**](<{url}>)")
-        else:
-            # If the request fails, send an error message
-            await interaction.response.send_message("Something went wrong while searching. Please try again later.")
-#endregion
-
-#region  dropchance
-    @tree.command(name="dropchance", description="simulates pet and item drops")
-    async def dropchance(interaction: discord.Interaction):
-        try:
-            await interaction.response.send_modal(modals.DropChance())
-        except Exception as e:
-            print(e)
-
-#endregion
-
-#region  whichboss
-    @tree.command(name="which_boss", description="picks a random boss to do")
-    async def which_boss(interaction: discord.Interaction):
-
-        bosses = [
-                    "Vindicta", "Greg", "Helwyr", "Twin Furies", "Nex", "Telos", "Araxxi", "Croesus", "Kerapac", "Zuk", "Arch-Glacor", "Raksha", 
-                    "Sanctum of Rebirth", "Ambassador", "Barrows: Rise of the Six", "Raids",  "Rasial", "Graardor", "K'ril", "Kree'arra", "Zilyana",
-                    "Kalphite King", "Nex: Angel of Death", "Solak", "Vorago", "Zamorak", "Vorkath", "QBD", "Magister", "Corporeal Beast", "Black Stone Dragon",
-                    "Seiryu", "Nakatra", "Gate of Elidinis", "Legiones", "Rex Matriarchs", "Barrows", "KBD", "Giant Mole", "Chaos Elemental"
-                    ]
-
-        choice = random.choice(bosses)
-        await interaction.response.send_message(f"The selected boss is: {choice}")
-#endregion
-
-#region force_qotd
-    @tree.command(name="force_qotd", description="force send qotd post")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def force_qotd(interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=True)
-        try:
-            await functions.send_qotd(client)
-        except Exception as e:
-            print(e)
-        await interaction.followup.send("QOTD Sent!", ephemeral=True)
-
-    force_qotd.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
+#qotd commands---------------------------------
 #region  qotd leaderboards
     @tree.command(name="leaderboard", description="Shows you the QOTD Leaderboards")
     @discord.app_commands.checks.has_permissions(administrator=True)
@@ -914,35 +500,7 @@ def load_commands(tree, client, TaskClass):
     leaderboard.default_permissions = discord.Permissions(administrator=True)
 #endregion
 
-#region  test_thingy
-    @tree.command(name="test_thing", description="sends test post")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def test_thing(interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=True)
-        user = await functions.load_user(client, interaction.user.id, interaction.guild_id)
-        if user.roles is None:
-            roles = "None logged"
-        else:
-            roles = ""
-            for role in list(user.roles):
-                roles += f"<@&{role}> | "
-            roles = roles.rstrip(" | ")
-        await interaction.followup.send(f"User stats for **{user.name}**\n\n**id:** {user.id}\n**level:** {user.level}    |   **xp:** {user.xp}\n**roles:** {roles}\n**messages:** {user.messages}\n**qotd points:** {user.qotd.points}\n**correct:** {user.qotd.correct}\n**wins:** {user.qotd.wins}\n**top 3:** {user.qotd.top_3}\n**total_questions:** {user.qotd.total_questions}\n**achievement total points:** {user.achievements}\n**skilling:** *points - {user.achievements.skilling.points}, tasks - {user.achievements.skilling.tasks}*\n**combat:** *points - {user.achievements.combat.points}, tasks - {user.achievements.combat.tasks}*\n**clan:** *points - {user.achievements.clan.points}, tasks - {user.achievements.clan.tasks}*\n**drops:** *points - {user.achievements.drops.points}, tasks - {user.achievements.drops.tasks}*", ephemeral=True)
-    test_thing.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
-#region  codebox
-    @tree.command(name="exec", description="Execute Python code")
-    @discord.app_commands.checks.has_permissions(administrator=True)
-    async def exec(interaction: discord.Interaction):
-        if interaction.user.id != config.OWNER:
-            await interaction.response.send_message("⛔ You cannot use this.", ephemeral=True)
-            return
-
-        await interaction.response.send_modal(codebox.CodeModal())
-    exec.default_permissions = discord.Permissions(administrator=True)
-#endregion
-
+#context menu commands (right clicks)
 #region  Give Achievement (Context)
     @tree.context_menu(name="Give Achievement")
     @discord.app_commands.checks.has_permissions(manage_messages=True)
@@ -970,7 +528,6 @@ def load_commands(tree, client, TaskClass):
             print(f"Give Achievement (Context) error: {e}")
     give_ach.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
-
 #region  award drop points (Context)
     @tree.context_menu(name="Award Drop Points")
     @discord.app_commands.checks.has_permissions(manage_messages=True)
@@ -986,8 +543,7 @@ def load_commands(tree, client, TaskClass):
             print(f"award drop points (Context) error: {e}")
     give_drop.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
-
-#region  view points (Context)
+#region  View Profile (Context)
     @tree.context_menu(name="View Profile")
     async def view_prof(interaction: discord.Interaction, member: discord.Member):
         await interaction.response.defer(ephemeral=True)
@@ -999,6 +555,253 @@ def load_commands(tree, client, TaskClass):
             for role in list(user.roles):
                 roles += f"<@&{role}> | "
             roles = roles.rstrip(" | ")
-        await interaction.followup.send(f"User stats for **{user.name}**\n\n**id:** {user.id}\n**level:** {user.level}    |   **xp:** {user.xp}\n**roles:** {roles}\n**messages:** {user.messages}\n**qotd points:** {user.qotd.points}\n**correct:** {user.qotd.correct}\n**wins:** {user.qotd.wins}\n**top 3:** {user.qotd.top_3}\n**total_questions:** {user.qotd.total_questions}\n**achievement total points:** {user.achievements}\n**skilling:** *points - {user.achievements.skilling.points}, tasks - {user.achievements.skilling.tasks}*\n**combat:** *points - {user.achievements.combat.points}, tasks - {user.achievements.combat.tasks}*\n**clan:** *points - {user.achievements.clan.points}, tasks - {user.achievements.clan.tasks}*\n**drops:** *points - {user.achievements.drops.points}, tasks - {user.achievements.drops.tasks}*", ephemeral=True)
-
+        file = await functions.fetch_usercard(client, member, interaction.guild_id)
+        await interaction.followup.send(file=file, ephemeral=True)
 #endregion
+
+
+#DEMON STUFF vvvvvvvvvv
+#region  dmg_t1 -->  @tree.context_menu(name="Damage Demon")
+#    @tree.context_menu(name="Damage Demon")
+#    @discord.app_commands.checks.has_permissions(manage_messages=True)
+#    async def dmg_t1(interaction: discord.Interaction, message: discord.Message):
+#        await interaction.response.defer(ephemeral=True)
+#        channel_id = interaction.channel.id
+#        demon_channel = client.get_channel(channel_id)
+#
+#        view=myviews.RollDamageTier(client, message, demon_message=None)
+#        demon_message = await demon_channel.send(view=view)
+#        view.demon_message = demon_message
+#
+#        await interaction.followup.send("Select the drop tier", ephemeral=True)
+#
+#   
+#    dmg_t1.default_permissions = discord.Permissions(manage_messages=True)
+#endregion
+
+#region  damage_obelisk
+    '''
+    @tree.command(name="damage_obelisk", description="Apply damage to an obelisk")
+    @app_commands.describe(tier = "enter the damage tier of the broadcast")
+    @app_commands.choices(tier=[
+        app_commands.Choice(name="Tier 1: 1m-49m", value=1),
+        app_commands.Choice(name="Tier 2: 50-99m", value=2),
+        app_commands.Choice(name="Tier 3: 100-199m", value=3),
+        app_commands.Choice(name="Tier 4: 200-499m", value=4),
+        app_commands.Choice(name="Tier 5: 500m+", value=5),
+    ])
+    @discord.app_commands.checks.has_permissions(manage_messages=True)
+    async def damage_obelisk(interaction: discord.Interaction, tier: int):
+        await interaction.response.defer(ephemeral=True)
+        async with client.db.cursor() as cursor:
+
+                team = "Obelisk"
+                await cursor.execute("SELECT hp FROM bosses WHERE team = ? AND guild = ?", (team, interaction.guild.id,))
+                hp = await cursor.fetchone()
+                await cursor.execute("SELECT name FROM bosses WHERE team = ? AND guild = ?", (team, interaction.guild.id,))
+                name = await cursor.fetchone()
+                await cursor.execute("SELECT level FROM bosses WHERE team = ? AND guild = ?", (team, interaction.guild.id,))
+                level = await cursor.fetchone()
+
+                hp = hp[0]
+                name = name[0]
+                level = level[0]
+                channel_id = config.OBELISK_CHANNEL
+                target_channel = client.get_channel(channel_id)
+                min_hit = 1
+                if tier == 3:
+                       min_hit = 10
+                if tier == 4:
+                       min_hit = 20
+                if tier == 5:
+                       min_hit = 40
+                base_hit = random.randint(min_hit, (tier * 20))
+
+                if base_hit >= hp:
+                        new_hp = (level * 50)
+                        await cursor.execute("UPDATE bosses SET hp = ? WHERE team = ? AND guild = ?", (new_hp, team, interaction.guild.id,))
+                        await client.db.commit()
+                        for item in config.team_list:
+                               if item[1] == 0:
+                                      await target_channel.send(f"**Error:** *Team `{item[0]}` is missing a `channel_id`!*")
+                                      continue
+                               await functions.send_debuffs(item, client)
+                               await functions.send_demon_view(item, client)
+
+
+                        dmgembed = discord.Embed(title=f"Obelisk Destroyed!", description=f"")
+                        dmgembed.set_thumbnail(url="https://i.imgur.com/jOKSDZK.png")
+                        dmgembed.add_field(name="", value=f"**{name}** took **{base_hit}** damage and has been destroyed!", inline=False)
+                        dmgembed.add_field(name="Demon Buff Aura", value=f"After being destroyed, it explodes and releases a wave of buffs over the Demons.\n*The Obelisk reverts back to its original state.*", inline=False)
+
+                        await target_channel.send(f"<@&1267465391865860177>", embed=dmgembed)
+                        await functions.send_obelisk_view(client)
+                        await interaction.followup.send(f"Damage Obelisk Sent", ephemeral=True)
+
+                else:
+                
+                        new_hp = (hp - base_hit)
+
+                        await cursor.execute("UPDATE bosses SET hp = ? WHERE team = ? AND guild = ?", (new_hp, team, interaction.guild.id,))
+                        await client.db.commit()
+
+                        dmgembed = discord.Embed(title=f"Obelisk Damaged!", description=f"")
+                        dmgembed.set_thumbnail(url="https://i.imgur.com/jOKSDZK.png")
+                        dmgembed.add_field(name="", value=f"**{name}** took **{base_hit}** damage and now has **{new_hp} HP** remaining!", inline=False)
+
+                        await target_channel.send(embed=dmgembed)
+                        await functions.send_obelisk_view(client)
+                        await interaction.followup.send(f"Damage Obelisk Sent", ephemeral=True)
+    
+    damage_obelisk.default_permissions = discord.Permissions(manage_messages=True)
+    '''
+#endregion
+
+#region  add_obelisk
+    @tree.command(name="add_obelisk", description="add new discord demon debuff obelisk")
+    @app_commands.describe(level = "enter Obelisk level (# of demonlords)")
+    @discord.app_commands.checks.has_permissions(administrator=True)
+    async def add_obelisk(interaction: discord.Interaction, level: int):
+        await interaction.response.defer()
+        async with client.db.cursor() as cursor:
+                team = "Obelisk"
+                hp = (50 * level)
+                name = "Obelisk"
+                await cursor.execute("INSERT INTO bosses (team, level, hp, guild, name, debuff) VALUES (?, ?, ?, ?, ?, ?)", (team, level, hp, interaction.guild.id, name, "None",))
+                await client.db.commit()
+
+                bossembed = discord.Embed(title=f"Obelisk Summoned!", description=f"A Debuff Obelisk appears")
+                bossembed.set_thumbnail(url="https://i.imgur.com/sIiIux4.png")
+                bossembed.add_field(name="", value=f"I have summoned the Obelisk for you!")
+                await interaction.followup.send(embed=bossembed)
+
+    add_obelisk.default_permissions = discord.Permissions(administrator=True)
+#endregion
+
+#region  view_obelisk
+    @tree.command(name="view_obelisk", description="View the current state of the obelisk")
+    @discord.app_commands.checks.has_permissions(administrator=True)
+    async def view_obelisk(interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+        try:
+            await functions.viewObelisk(client)
+        except Exception as e:
+            print(e)
+        await interaction.followup.send("Obelisk view sent to obelisk channel", ephemeral=True)
+
+    view_obelisk.default_permissions = discord.Permissions(administrator=True)
+#endregion
+
+#region  view_demon_m
+    @tree.command(name="view_demon_m", description="View the current state of one of the demons")
+    @app_commands.describe(team = "choose team name")
+    @app_commands.choices(team=functions.generate_team_choices())
+    @discord.app_commands.checks.has_permissions(manage_messages=True)
+    async def view_demon_m(interaction: discord.Interaction, team: str):
+        async with client.db.cursor() as cursor:
+            await cursor.execute("SELECT hp, name, level, debuff FROM bosses WHERE team = ?", (team,))
+            hp, name, level, debuff = await cursor.fetchone()
+
+            if hp < 0:
+                  hp = 0
+
+            boss_data = {
+                 "hp": hp,
+                 "name": name,
+                 "debuff": debuff,
+                 "max_hp": (level * 1000),
+                 "percentage": ((hp / (level * 1000)) * 100),
+            }
+
+            background = Editor(Canvas((900, 300), color="#141414"))
+            profile_picture = await load_image_async(str("https://pngimg.com/uploads/demon/demon_PNG21.png"))
+            profile = Editor(profile_picture).resize((150, 150)).circle_image()
+
+            poppins = Font.poppins(size=40)
+            poppins_small = Font.poppins(size=30)
+
+            card_right_shape = [(600, 0), (750, 300), (900, 300), (900, 0)]
+
+            background.polygon(card_right_shape, color="#880808")
+            background.paste(profile, (30, 30))
+
+            background.rectangle((30, 220), width=650, height=40, color="#880808", outline="#FFFFFF", radius=20)
+            background.bar((30, 220), max_width=650, height=40, percentage=boss_data["percentage"], color="#000000", outline="#FFFFFF", radius=20)
+
+            background.text((200, 40), boss_data["name"], font=poppins, color="#FFFFFF")
+
+            background.rectangle((200, 100), width=350, height=2, fill="#880808")
+            background.text(
+                 (200, 130),
+                 f"Team - {team}  |  HP - {boss_data['hp']}/{boss_data['max_hp']}",
+                 font = poppins_small,
+                 color="#FFFFFF",
+            )
+            background.text(
+                 (200, 170),
+                 f"Demon Buff: {boss_data['debuff']}",
+                 font = poppins_small,
+                 color="#880808",
+            )
+
+            file = discord.File(fp=background.image_bytes, filename="demonstats.png")
+            await interaction.response.send_message(file=file)
+
+    view_demon_m.default_permissions = discord.Permissions(manage_messages=True)
+#endregion
+
+#region  view_demon (ephemeral)
+    @tree.command(name="view_demon", description="View the current state of one of the demons")
+    @app_commands.describe(team = "choose team name")
+    @app_commands.choices(team=functions.generate_team_choices())
+    async def view_demon(interaction: discord.Interaction, team: str):
+        async with client.db.cursor() as cursor:
+            await cursor.execute("SELECT hp, name, level, debuff FROM bosses WHERE team = ?", (team,))
+            hp, name, level, debuff = await cursor.fetchone()
+
+            if hp < 0:
+                  hp = 0
+
+            boss_data = {
+                 "hp": hp,
+                 "name": name,
+                 "debuff": debuff,
+                 "max_hp": (level * 1000),
+                 "percentage": ((hp / (level * 1000)) * 100),
+            }
+
+            background = Editor(Canvas((900, 300), color="#141414"))
+            profile_picture = await load_image_async(str("https://pngimg.com/uploads/demon/demon_PNG21.png"))
+            profile = Editor(profile_picture).resize((150, 150)).circle_image()
+
+            poppins = Font.poppins(size=40)
+            poppins_small = Font.poppins(size=30)
+
+            card_right_shape = [(600, 0), (750, 300), (900, 300), (900, 0)]
+
+            background.polygon(card_right_shape, color="#880808")
+            background.paste(profile, (30, 30))
+
+            background.rectangle((30, 220), width=650, height=40, color="#880808", outline="#FFFFFF", radius=20)
+            background.bar((30, 220), max_width=650, height=40, percentage=boss_data["percentage"], color="#000000", outline="#FFFFFF", radius=20)
+
+            background.text((200, 40), boss_data["name"], font=poppins, color="#FFFFFF")
+
+            background.rectangle((200, 100), width=350, height=2, fill="#880808")
+            background.text(
+                 (200, 130),
+                 f"Team - {team}  |  HP - {boss_data['hp']}/{boss_data['max_hp']}",
+                 font = poppins_small,
+                 color="#FFFFFF",
+            )
+            background.text(
+                 (200, 170),
+                 f"Demon Buff: {boss_data['debuff']}",
+                 font = poppins_small,
+                 color="#880808",
+            )
+
+            file = discord.File(fp=background.image_bytes, filename="demonstats.png")
+            await interaction.response.send_message(file=file, ephemeral=True)
+#endregion
+
