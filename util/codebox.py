@@ -1,9 +1,18 @@
-import discord
+#region  imports
+# Standard library
 import io
 import textwrap
 import traceback
 from contextlib import redirect_stdout
-from util import config, functions, myviews, modals
+
+# Third-party libraries
+import discord
+
+# custom modules
+from util import myviews, config, functions, modals
+
+#endregion
+
 
 class CodeModal(discord.ui.Modal, title="Execute Code"):
     code = discord.ui.TextInput(
@@ -42,6 +51,7 @@ class CodeModal(discord.ui.Modal, title="Execute Code"):
                 body = "async def _func():\n" + textwrap.indent(code, "    ")
 
                 stdout = io.StringIO()
+                result = None
                 try:
                     exec(body, env)
                     func = env["_func"]

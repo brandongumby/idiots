@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 
 class VorkMenu(discord.ui.View):
@@ -26,7 +25,7 @@ class VorkMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             zemo_field = embed_dict['fields'][2]['value']
             vork_field = embed_dict['fields'][3]['value']
@@ -38,13 +37,13 @@ class VorkMenu(discord.ui.View):
 
             elif zemo_field == "`Empty`" and not any(field == user_mention for field in dps_field[:8]) and vork_field != user_mention:
                 embed.set_field_at(2, name=f"🛡️ Zemo Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif zemo_field == user_mention:
                 embed.set_field_at(2, name=f"🛡️ Zemo Tank", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)  
 
@@ -66,7 +65,7 @@ class VorkMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             zemo_field = embed_dict['fields'][2]['value']
             vork_field = embed_dict['fields'][3]['value']
@@ -78,13 +77,13 @@ class VorkMenu(discord.ui.View):
 
             elif vork_field == "`Empty`" and not any(field == user_mention for field in dps_field[:8]) and zemo_field != user_mention:
                 embed.set_field_at(3, name=f"🐲 Vorky Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif vork_field == user_mention:
                 embed.set_field_at(3, name=f"🐲 Vorky Tank", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)  
 
@@ -106,7 +105,7 @@ class VorkMenu(discord.ui.View):
             user_mention = f"<@{interaction.user.id}> ({user_name})"
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             zemo_field = embed_dict['fields'][2]['value']
             vork_field = embed_dict['fields'][3]['value']
@@ -121,7 +120,7 @@ class VorkMenu(discord.ui.View):
                 self.remove_user(dps_field, user_mention, user_id)
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(4, name="⚔️ DPS", value=combined_value, inline=False)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -137,7 +136,7 @@ class VorkMenu(discord.ui.View):
             self.add_user(dps_field, user_mention, user_id)
             combined_value = ", ".join(dps_field)
             embed.set_field_at(4, name="⚔️ DPS", value=combined_value, inline=False)
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:

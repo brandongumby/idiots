@@ -1,6 +1,5 @@
 import discord
 from util import buttons, functions
-from util.functions import get_teamsize
 
 
 class HMAmasMenu(discord.ui.View):
@@ -24,7 +23,7 @@ class HMAmasMenu(discord.ui.View):
         try:
             user_mention = f"<@{interaction.user.id}> ({interaction.user.name})"
             embed = interaction.message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             NW_field = embed_dict['fields'][3]['value']
@@ -49,7 +48,7 @@ class HMAmasMenu(discord.ui.View):
                 await interaction.response.send_message(f"You are signed up as an incompatible role!", ephemeral=True)
                 return
             embed.set_field_at(2, name=f"🛡️ Base", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"basebutton error(HMAmasMenu): {e}")
@@ -70,7 +69,7 @@ class HMAmasMenu(discord.ui.View):
             green_field = embed_dict['fields'][7]['value'].split(", ")
             field_list = [base_field, SW_field, NE_field, SE_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -86,7 +85,7 @@ class HMAmasMenu(discord.ui.View):
                 return
 
             embed.set_field_at(3, name="↖️ West Scarabs", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"westscarabs error(HMAmasMenu): {e}")
@@ -107,7 +106,7 @@ class HMAmasMenu(discord.ui.View):
             green_field = embed_dict['fields'][7]['value'].split(", ")
             field_list = [base_field, NW_field, NE_field, SE_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -123,7 +122,7 @@ class HMAmasMenu(discord.ui.View):
                 return
 
             embed.set_field_at(4, name="↙️ West Chains", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"westchains error(HMAmasMenu): {e}")
@@ -144,7 +143,7 @@ class HMAmasMenu(discord.ui.View):
             green_field = embed_dict['fields'][7]['value'].split(", ")
             field_list = [base_field, NW_field, SW_field, SE_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -160,7 +159,7 @@ class HMAmasMenu(discord.ui.View):
                 return
 
             embed.set_field_at(5, name="↗️ East Scarabs", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"eastscarabs error(HMAmasMenu): {e}")
@@ -181,7 +180,7 @@ class HMAmasMenu(discord.ui.View):
             green_field = embed_dict['fields'][7]['value'].split(", ")
             field_list = [base_field, NW_field, SW_field, NE_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -197,7 +196,7 @@ class HMAmasMenu(discord.ui.View):
                 return
 
             embed.set_field_at(6, name="↘️ East Chains", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"eastchains error(HMAmasMenu): {e}")
@@ -212,7 +211,7 @@ class HMAmasMenu(discord.ui.View):
             embed_dict = embed.to_dict()
             green_field = embed_dict['fields'][7]['value'].split(", ")
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -228,7 +227,7 @@ class HMAmasMenu(discord.ui.View):
                 combined_value = ", ".join(green_field)
                 new_field = combined_value
             embed.set_field_at(7, name="🟩 Green Lines", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"greenlines error(HMAmasMenu): {e}")
@@ -240,7 +239,7 @@ class HMAmasMenu(discord.ui.View):
         try:
             user_mention = f"<@{interaction.user.id}> ({interaction.user.name})"
             embed = interaction.message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             platform_field = embed_dict['fields'][8]['value']
             heiroglyph_field = embed_dict['fields'][9]['value']
@@ -261,7 +260,7 @@ class HMAmasMenu(discord.ui.View):
                 await interaction.response.send_message(f"You are signed up as an incompatible role!", ephemeral=True)
                 return
             embed.set_field_at(8, name=f"⤴️ Platformer (sub 2k)", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"platformer error(HMAmasMenu): {e}")
@@ -273,7 +272,7 @@ class HMAmasMenu(discord.ui.View):
         try:
             user_mention = f"<@{interaction.user.id}> ({interaction.user.name})"
             embed = interaction.message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             platform_field = embed_dict['fields'][8]['value']
             heiroglyph_field = embed_dict['fields'][9]['value']
@@ -294,7 +293,7 @@ class HMAmasMenu(discord.ui.View):
                 await interaction.response.send_message(f"You are signed up as an incompatible role!", ephemeral=True)
                 return
             embed.set_field_at(9, name=f"🔣 Heiroglyphs", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"Heiroglyphs error(HMAmasMenu): {e}")

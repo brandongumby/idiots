@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 class CroeMenu(discord.ui.View):
     labels_to_disable = ["Hunter", "Woodcutting", "Mining", "Fishing"]
@@ -28,7 +27,7 @@ class CroeMenu(discord.ui.View):
             mining_field = embed_dict['fields'][4]['value']
             fishing_field = embed_dict['fields'][5]['value']
 
-            if len(get_teamsize(embed)) == 4 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 4 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -44,7 +43,7 @@ class CroeMenu(discord.ui.View):
                 return
 
             embed.set_field_at(2, name=f"🦋 Hunter", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/4")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/4")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"hunterbutton error(CroeMenu): {e}")
@@ -62,7 +61,7 @@ class CroeMenu(discord.ui.View):
             mining_field = embed_dict['fields'][4]['value']
             fishing_field = embed_dict['fields'][5]['value']
 
-            if len(get_teamsize(embed)) == 4 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 4 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -78,7 +77,7 @@ class CroeMenu(discord.ui.View):
                 return
 
             embed.set_field_at(3, name=f"🪓 Woodcutting", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/4")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/4")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"woodcuttingbutton error(CroeMenu): {e}")
@@ -96,7 +95,7 @@ class CroeMenu(discord.ui.View):
             mining_field = embed_dict['fields'][4]['value']
             fishing_field = embed_dict['fields'][5]['value']
 
-            if len(get_teamsize(embed)) == 4 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 4 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -112,7 +111,7 @@ class CroeMenu(discord.ui.View):
                 return
 
             embed.set_field_at(4, name=f"⛏️ Mining", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/4")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/4")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"miningbutton error(CroeMenu): {e}")
@@ -130,7 +129,7 @@ class CroeMenu(discord.ui.View):
             mining_field = embed_dict['fields'][4]['value']
             fishing_field = embed_dict['fields'][5]['value']
 
-            if len(get_teamsize(embed)) == 4 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 4 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
 
@@ -146,7 +145,7 @@ class CroeMenu(discord.ui.View):
                 return
 
             embed.set_field_at(5, name=f"🎣 Fishing", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/4")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/4")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"fishingbutton error(CroeMenu): {e}")

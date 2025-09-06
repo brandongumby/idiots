@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 class SolakMenu(discord.ui.View):
     labels_to_disable = ["Base", "North West", "South West", "North East", "South East", "Elf"]
@@ -25,7 +24,7 @@ class SolakMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             elf_field = embed_dict['fields'][7]['value'].split("\n")
@@ -36,13 +35,13 @@ class SolakMenu(discord.ui.View):
 
             elif base_field == "`Empty`" and not any(field == user_mention for field in elf_field[:2]):
                 embed.set_field_at(2, name=f"🛡️ Base", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif base_field == user_mention:
                 embed.set_field_at(2, name=f"🛡️ Base", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -65,7 +64,7 @@ class SolakMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             northwest_field = embed_dict['fields'][3]['value'].split("\n")
             southwest_field = embed_dict['fields'][4]['value'].split("\n")
@@ -87,7 +86,7 @@ class SolakMenu(discord.ui.View):
                 self.add_user(northwest_field, user_mention, user_id)
                 combined_value = "\n ".join(northwest_field)
                 embed.set_field_at(3, name=f"↖️ North West", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -96,7 +95,7 @@ class SolakMenu(discord.ui.View):
                 self.remove_user(northwest_field, user_mention, user_id)
                 combined_value = "\n ".join(northwest_field)
                 embed.set_field_at(3, name=f"↖️ North West", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -120,7 +119,7 @@ class SolakMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northwest_field = embed_dict['fields'][3]['value'].split("\n")
@@ -143,7 +142,7 @@ class SolakMenu(discord.ui.View):
                 self.add_user(southwest_field, user_mention, user_id)
                 combined_value = "\n ".join(southwest_field)
                 embed.set_field_at(4, name=f"↙️ South West", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -152,7 +151,7 @@ class SolakMenu(discord.ui.View):
                 self.remove_user(southwest_field, user_mention, user_id)
                 combined_value = "\n ".join(southwest_field)
                 embed.set_field_at(4, name=f"↙️ South West", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -176,7 +175,7 @@ class SolakMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northwest_field = embed_dict['fields'][3]['value'].split("\n")
@@ -199,7 +198,7 @@ class SolakMenu(discord.ui.View):
                 self.add_user(northeast_field, user_mention, user_id)
                 combined_value = "\n ".join(northeast_field)
                 embed.set_field_at(5, name=f"↗️ North East", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -208,7 +207,7 @@ class SolakMenu(discord.ui.View):
                 self.remove_user(northeast_field, user_mention, user_id)
                 combined_value = "\n ".join(northeast_field)
                 embed.set_field_at(5, name=f"↗️ North East", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -232,7 +231,7 @@ class SolakMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northwest_field = embed_dict['fields'][3]['value'].split("\n")
@@ -255,7 +254,7 @@ class SolakMenu(discord.ui.View):
                 self.add_user(southeast_field, user_mention, user_id)
                 combined_value = "\n ".join(southeast_field)
                 embed.set_field_at(6, name=f"↘️ South East", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -264,7 +263,7 @@ class SolakMenu(discord.ui.View):
                 self.remove_user(southeast_field, user_mention, user_id)
                 combined_value = "\n ".join(southeast_field)
                 embed.set_field_at(6, name=f"↘️ South East", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -288,7 +287,7 @@ class SolakMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northwest_field = embed_dict['fields'][3]['value'].split("\n")
@@ -305,7 +304,7 @@ class SolakMenu(discord.ui.View):
                 self.remove_user(elf_field, user_mention, user_id)
                 combined_value = "\n ".join(elf_field)
                 embed.set_field_at(7, name="🧝‍♀️ Elf", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -321,7 +320,7 @@ class SolakMenu(discord.ui.View):
             self.add_user(elf_field, user_mention, user_id)
             combined_value = "\n".join(elf_field)
             embed.set_field_at(7, name="🧝‍♀️ Elf", value=combined_value, inline=True)
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:

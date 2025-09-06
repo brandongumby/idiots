@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 
 class KeraMenu(discord.ui.View):
@@ -27,7 +26,7 @@ class KeraMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             north_field = embed_dict['fields'][2]['value']
             west_field = embed_dict['fields'][3]['value']
@@ -39,13 +38,13 @@ class KeraMenu(discord.ui.View):
 
             elif north_field == "`Empty`" and not any(field == user_mention for field in [west_field, south_field]):
                 embed.set_field_at(2, name=f"⬆️ North Echo", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/3")
                 await interaction.response.edit_message(embed=embed)
 
             elif north_field == user_mention:
                 embed.set_field_at(2, name=f"⬆️ North Echo", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/3")
                 await interaction.response.edit_message(embed=embed)
 
@@ -69,7 +68,7 @@ class KeraMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             north_field = embed_dict['fields'][2]['value']
             west_field = embed_dict['fields'][3]['value']
@@ -81,13 +80,13 @@ class KeraMenu(discord.ui.View):
 
             elif west_field == "`Empty`" and not any(field == user_mention for field in [north_field, south_field]):
                 embed.set_field_at(3, name=f"⬅️ West Echo", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/3")
                 await interaction.response.edit_message(embed=embed)
 
             elif west_field == user_mention:
                 embed.set_field_at(3, name=f"⬅️ West Echo", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/3")
                 await interaction.response.edit_message(embed=embed)
 
@@ -110,7 +109,7 @@ class KeraMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             north_field = embed_dict['fields'][2]['value']
             west_field = embed_dict['fields'][3]['value']
@@ -122,13 +121,13 @@ class KeraMenu(discord.ui.View):
 
             elif south_field == "`Empty`" and not any(field == user_mention for field in [north_field, west_field]):
                 embed.set_field_at(4, name=f"⬇️ South Echo", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/3")
                 await interaction.response.edit_message(embed=embed)
 
             elif south_field == user_mention:
                 embed.set_field_at(4, name=f"⬇️ South Echo", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/3")
                 await interaction.response.edit_message(embed=embed)
 

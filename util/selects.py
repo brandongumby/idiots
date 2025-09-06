@@ -1,5 +1,16 @@
+#region  imports
+# Standard libraries
+import random
+
+# Third-party libraries
 import discord
-from util import embeds, config, myviews, achievements
+from discord.ui import View
+from discord import NotFound
+
+# Custom modules
+from util import myviews, achievements, embeds, functions, config
+
+# Boss menus
 from bosses.vorago import vmenu, hmvmenu
 from bosses.raids import raidsmenu
 from bosses.aod import aodmenu, aod8menu, aod5menu
@@ -13,9 +24,8 @@ from bosses.sanctum import sormenu
 from bosses.gate import goemenu
 from bosses.eds import edsmenu
 from bosses.amascut import amascutmenu, hmamascutmenu
-from discord.ui import View
-import copy
 
+#endregion
 
 
 #region  POFDropdown
@@ -805,7 +815,7 @@ class TeamformDropdown(discord.ui.Select):
             await interaction.message.edit(view=new_view)
 #endregion
 
-#region
+#region  AchievementDropdown
 class AchievementDropdown(discord.ui.Select):
         def __init__(self, client, uncompleted_list, target_user):
             options = [discord.SelectOption(label=name) for name in uncompleted_list]
@@ -831,7 +841,7 @@ class AchievementDropdown(discord.ui.Select):
                 print(f"AchievementDropdown error: {e}")
 #endregion  
 
-#region multipage achievement dropdown
+#region  multipage achievement dropdown
 class AchievementDropdownMulti(discord.ui.Select):
         def __init__(self, client, lists_dict, target_user):
             options = [discord.SelectOption(label=a["name"]) for a in lists_dict]
@@ -854,3 +864,39 @@ class AchievementDropdownMulti(discord.ui.Select):
                 print(f"AchievementDropdownMulti error: {e}")
 #endregion
 
+#region  GodsEventSelect
+class GodsEventSelect(discord.ui.Select):
+        def __init__(self, client, message):
+            options=[
+                   discord.SelectOption(label="Tier 1 Drop"),
+                   discord.SelectOption(label="Tier 1 Drop | BUFFED"),
+                   discord.SelectOption(label="Tier 2 Drop"),
+                   discord.SelectOption(label="Tier 2 Drop | BUFFED"),
+                   discord.SelectOption(label="Tier 3 Drop"),
+                   discord.SelectOption(label="Tier 3 Drop | BUFFED"),
+                   discord.SelectOption(label="Tier 4 Drop"),
+                   discord.SelectOption(label="Tier 4 Drop | BUFFED"),
+                   discord.SelectOption(label="Tier 5 Drop"),
+                   discord.SelectOption(label="Tier 5 Drop | BUFFED"),
+                   ]
+
+            super().__init__(placeholder="Please select a drop Tier", options=options, min_values=1, max_values=1, custom_id="gods_event_dropdown")
+            self.client = client
+            self.message = message
+
+        async def callback(self, interaction: discord.Interaction):
+            if self.values[0] == "Tier 1 Drop":
+                try:
+                    tier = "tier1"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(250, 1000)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"t1_gods_event error(GodsEventSelect): {e}")
+
+#endregion

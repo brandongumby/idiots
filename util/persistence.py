@@ -1,6 +1,14 @@
+#region  imports
+# standard imports
+import json
+
+# custom modules
+from util import myviews, config
+
+# boss menus
 from bosses.vorago import vmenu, hmvmenu
 from bosses.raids import raidsmenu
-from bosses.aod import aodmenu, aod5menu, aod8menu
+from bosses.aod import aodmenu, aod8menu, aod5menu
 from bosses.vorkath import vorkmenu
 from bosses.rots import rotsmenu
 from bosses.kerapac import keramenu
@@ -11,8 +19,7 @@ from bosses.sanctum import sormenu
 from bosses.gate import goemenu
 from bosses.eds import edsmenu
 from bosses.amascut import amascutmenu, hmamascutmenu
-from util import myviews, config
-import json
+#endregion
 
 
 async def create_views(client, TaskClass):

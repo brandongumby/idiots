@@ -209,3 +209,4 @@ __marimo__/
 
 config.py
 util/config.py
+util/service_account.json

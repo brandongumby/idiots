@@ -1,6 +1,14 @@
-import discord
+#region  imports
+# Standard library
 import copy
 from datetime import datetime
+
+# Third-party libraries
+import discord
+
+#endregion
+
+
 
 message_sets = {}
 

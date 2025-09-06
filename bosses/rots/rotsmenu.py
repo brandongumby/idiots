@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 class RotsMenu(discord.ui.View):
     labels_to_disable = ["Incite West", "DPS West", "Incite East", "DPS East"]
@@ -25,7 +24,7 @@ class RotsMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             iwest_field = embed_dict['fields'][2]['value']
             dpswest_field = embed_dict['fields'][3]['value']
@@ -38,13 +37,13 @@ class RotsMenu(discord.ui.View):
 
             elif iwest_field == "`Empty`" and not any(field == user_mention for field in [dpswest_field, ieast_field, dpseast_field]):
                 embed.set_field_at(2, name=f"↖️ Incite West", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
             elif iwest_field == user_mention:
                 embed.set_field_at(2, name=f"↖️ Incite West", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
@@ -66,7 +65,7 @@ class RotsMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             iwest_field = embed_dict['fields'][2]['value']
             dpswest_field = embed_dict['fields'][3]['value']
@@ -79,13 +78,13 @@ class RotsMenu(discord.ui.View):
 
             elif dpswest_field == "`Empty`" and not any(field == user_mention for field in [iwest_field, ieast_field, dpseast_field]):
                 embed.set_field_at(3, name=f"↙️ DPS West", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
             elif dpswest_field == user_mention:
                 embed.set_field_at(3, name=f"↙️ DPS West", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
@@ -107,7 +106,7 @@ class RotsMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             iwest_field = embed_dict['fields'][2]['value']
             dpswest_field = embed_dict['fields'][3]['value']
@@ -120,13 +119,13 @@ class RotsMenu(discord.ui.View):
 
             elif ieast_field == "`Empty`" and not any(field == user_mention for field in [iwest_field, dpswest_field, dpseast_field]):
                 embed.set_field_at(4, name=f"↗️ Incite East", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
             elif ieast_field == user_mention:
                 embed.set_field_at(4, name=f"↗️ Incite East", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
@@ -148,7 +147,7 @@ class RotsMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             iwest_field = embed_dict['fields'][2]['value']
             dpswest_field = embed_dict['fields'][3]['value']
@@ -161,13 +160,13 @@ class RotsMenu(discord.ui.View):
 
             elif dpseast_field == "`Empty`" and not any(field == user_mention for field in [iwest_field, dpswest_field, ieast_field]):
                 embed.set_field_at(5, name=f"↘️ DPS East", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
             elif dpseast_field == user_mention:
                 embed.set_field_at(5, name=f"↘️ DPS East", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 

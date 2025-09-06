@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 class Aod8Menu(discord.ui.View):
     labels_to_disable = ["Base", "Umbra", "Glacies", "Cruor", "Fumus", "Hammer", "Smoke Cloud", "DPS"]
@@ -25,7 +24,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
@@ -38,13 +37,13 @@ class Aod8Menu(discord.ui.View):
 
             if base_field == "`Empty`" and not any(field == user_mention for field in [umbra_field, glacies_field, cruor_field, fumus_field, hammer_field, sc_field]):
                 embed.set_field_at(2, name=f"🛡️ Base Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif base_field == user_mention:
                 embed.set_field_at(2, name=f"🛡️ Base Tank", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -66,7 +65,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
@@ -79,13 +78,13 @@ class Aod8Menu(discord.ui.View):
 
             if umbra_field == "`Empty`" and not any(field == user_mention for field in [base_field, glacies_field, cruor_field, fumus_field, hammer_field, sc_field]):
                 embed.set_field_at(3, name=f"🇺 Umbra", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif umbra_field == user_mention:
                 embed.set_field_at(3, name=f"🇺 Umbra", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -107,7 +106,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
@@ -121,13 +120,13 @@ class Aod8Menu(discord.ui.View):
     
             if glacies_field == "`Empty`" and not any(field == user_mention for field in [base_field, umbra_field, cruor_field, fumus_field, hammer_field, sc_field]):
                 embed.set_field_at(4, name=f"🇬 Glacies", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif glacies_field == user_mention:
                 embed.set_field_at(4, name=f"🇬 Glacies", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -149,7 +148,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
@@ -163,13 +162,13 @@ class Aod8Menu(discord.ui.View):
     
             if cruor_field == "`Empty`" and not any(field == user_mention for field in [base_field, umbra_field, glacies_field, fumus_field, hammer_field, sc_field]):
                 embed.set_field_at(5, name=f"🇨 Cruor", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif cruor_field == user_mention:
                 embed.set_field_at(5, name=f"🇨 Cruor", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -192,7 +191,7 @@ class Aod8Menu(discord.ui.View):
             message = interaction.message
             embed = message.embeds[0]
             embed_dict = embed.to_dict()
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
             glacies_field = embed_dict['fields'][4]['value']
@@ -205,13 +204,13 @@ class Aod8Menu(discord.ui.View):
         
             if fumus_field == "`Empty`" and not any(field == user_mention for field in [base_field, umbra_field, glacies_field, cruor_field, hammer_field, sc_field]):
                 embed.set_field_at(6, name=f"🇫 Fumus", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif fumus_field == user_mention:
                 embed.set_field_at(6, name=f"🇫 Fumus", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -233,7 +232,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
@@ -247,13 +246,13 @@ class Aod8Menu(discord.ui.View):
         
             if hammer_field == "`Empty`" and not any(field == user_mention for field in [base_field, umbra_field, glacies_field, cruor_field, fumus_field, sc_field]):
                 embed.set_field_at(7, name=f"🔨 Hammer", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif hammer_field == user_mention:
                 embed.set_field_at(7, name=f"🔨 Hammer", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -275,7 +274,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']
@@ -289,13 +288,13 @@ class Aod8Menu(discord.ui.View):
         
             if sc_field == "`Empty`" and not any(field == user_mention for field in [base_field, umbra_field, glacies_field, cruor_field, fumus_field, hammer_field]):
                 embed.set_field_at(8, name=f"☁️ Smoke Cloud", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
             elif sc_field == user_mention:
                 embed.set_field_at(8, name=f"☁️ Smoke Cloud", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/7")
                 await interaction.response.edit_message(embed=embed)
 
@@ -318,7 +317,7 @@ class Aod8Menu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             umbra_field = embed_dict['fields'][3]['value']

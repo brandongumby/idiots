@@ -1,5 +1,10 @@
-from util import functions
+#region  imports
+# Standard library
 import json
+
+#endregion
+
+
 
 #region  user
 class User:
@@ -144,7 +149,6 @@ class User:
 #endregion
 #endregion
 
-
 #region  player
 class Player:
     def __init__(self, client, user_id, name, guild_id):
@@ -160,10 +164,8 @@ class Player:
 
     class Drops:
         def __init__(self):
-            #list of message id's for drops
-            self.messages = []
-
-            self.total = 0
+            #drop log {"message_id": message_id,}
+            self.log = {}
             self.tier1 = 0
             self.tier2 = 0
             self.tier3 = 0
@@ -183,7 +185,7 @@ class Player:
             "points": self.points,
             "drops": {
                 "total": self.drops.total,
-                "messages": self.drops.messages,
+                "log": self.drops.log,
                 "tier1": self.drops.tier1,
                 "tier2": self.drops.tier2,
                 "tier3": self.drops.tier3,
@@ -209,8 +211,7 @@ class Player:
         player.buff = data.get("buff", None)
 
         drops_data = data.get("drops", {})
-        player.drops.total = drops_data.get("total", 0)
-        player.drops.messages = drops_data.get("messages", [])
+        player.drops.log = drops_data.get("log", {})
         player.drops.tier1 = drops_data.get("tier1", 0)
         player.drops.tier2 = drops_data.get("tier2", 0)
         player.drops.tier3 = drops_data.get("tier3", 0)
@@ -221,13 +222,13 @@ class Player:
         
     async def save(self):
         try:
-            data = json.dumps(self.to_dict())
             async with self.client.db.cursor() as cursor:
+                new_data = json.dumps(self.to_dict())
                 await cursor.execute("""
                     INSERT INTO players (user_id, guild, data)
                     VALUES (?, ?, ?)
                     ON CONFLICT(user_id, guild) DO UPDATE SET data=excluded.data
-                """, (self.id, self.guild, data))
+                """, (self.id, self.guild, new_data))
             await self.client.db.commit()
         except Exception as e:
             print(f"save_player error(objects.py): {e}")

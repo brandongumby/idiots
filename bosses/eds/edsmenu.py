@@ -1,7 +1,5 @@
 import discord
 from util import buttons, functions
-from util.functions import get_teamsize
-
 
 
 class EdsMenu(discord.ui.View):
@@ -26,7 +24,7 @@ class EdsMenu(discord.ui.View):
             user_mention = f"<@{interaction.user.id}> ({interaction.user.name})"
             embed = interaction.message.embeds[0]
             embed_dict = embed.to_dict()
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             dps_field = embed_dict['fields'][2]['value'].split(", ")
 
             if len(teamsize) == 3 and user_mention not in teamsize:
@@ -36,7 +34,7 @@ class EdsMenu(discord.ui.View):
                 functions.team_removeuser(dps_field, user_mention)
                 new_field = ", ".join(dps_field)
                 embed.set_field_at(2, name="⚔️ DPS", value=new_field, inline=True)
-                embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/3")
+                embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/3")
                 await interaction.response.edit_message(embed=embed)
                 return
             elif all(field != "`Empty`" for field in dps_field):
@@ -46,7 +44,7 @@ class EdsMenu(discord.ui.View):
             functions.team_adduser(dps_field, user_mention)
             new_field = ", ".join(dps_field)
             embed.set_field_at(2, name="⚔️ DPS", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/3")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/3")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"dpsbutton error(EdsaMenu): {e}")

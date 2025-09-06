@@ -1,8 +1,15 @@
-import discord
-from util import modals, config, myviews
-from util.functions import get_teamsize, remove_parentheses
-from discord.ui import Button
+#region  imports
+# Standard library
 from datetime import datetime, timezone
+
+# Third-party libraries
+import discord
+from discord.ui import Button
+
+# custom modules
+from util import myviews, config, functions, modals
+
+#endregion
 
 
 #region CommentButton
@@ -33,14 +40,14 @@ class PingButton(discord.ui.Button):
     async def callback(self, interaction: discord.Interaction):
         try:
             embed = interaction.message.embeds[0]
-            mention_string = " ".join(remove_parentheses(item) for item in get_teamsize(embed))
+            mention_string = " ".join(functions.remove_parentheses(item) for item in functions.get_teamsize(embed))
 
             pingembed = discord.Embed(title="PVM Hour Starting!")
             pingembed.add_field(name="Get Ready!", value=f"We are starting the hour soon!")
             pingembed.set_thumbnail(url=embed.thumbnail.url)
 
             if embed.author.name == f"Hosted by {interaction.user.name}" or interaction.user.guild_permissions.manage_messages:
-                if len(get_teamsize(embed)) != 0:
+                if len(functions.get_teamsize(embed)) != 0:
                     self.disabled = True
                     self.style = discord.ButtonStyle.secondary
 

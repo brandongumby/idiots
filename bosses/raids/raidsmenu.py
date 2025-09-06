@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 
 class RaidsMenu(discord.ui.View):
@@ -26,7 +25,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             busc_field = embed_dict['fields'][3]['value']
@@ -48,13 +47,13 @@ class RaidsMenu(discord.ui.View):
 
             elif base_field == f"`Empty`" and not any(field == user_mention for field in stun5_field[:2]) and not any(field == user_mention for field in dps_field[:5]) and not any(field == user_mention for field in [busc_field, pt13_field, pt2_field, northcharge_field, northtank_field, psntank_field, cpr_field, double_field, jelly_field, shark_field, stun0_field]):
                 embed.set_field_at(2, name=f"🛡️ Base Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif base_field == user_mention:
                 embed.set_field_at(2, name=f"🛡️ Base Tank", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed) 
 
@@ -76,7 +75,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             busc_field = embed_dict['fields'][3]['value']
@@ -90,12 +89,12 @@ class RaidsMenu(discord.ui.View):
 
             elif busc_field == f"`Empty`" and not any(field == user_mention for field in [base_field, pt13_field, pt2_field, northcharge_field]):
                 embed.set_field_at(3, name=f"🅱️ Backup SC", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
             elif busc_field == user_mention:
                 embed.set_field_at(3, name=f"🅱️ Backup SC", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)            
             elif busc_field != f"`Empty`" and busc_field != user_mention:
@@ -115,7 +114,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             busc_field = embed_dict['fields'][3]['value']
@@ -129,12 +128,12 @@ class RaidsMenu(discord.ui.View):
 
             elif pt13_field == f"`Empty`" and not any(field == user_mention for field in [base_field, busc_field, pt2_field, northcharge_field]):
                 embed.set_field_at(4, name=f"1️⃣ Pet Tank 1/3", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
             elif pt13_field == user_mention:
                 embed.set_field_at(4, name=f"1️⃣ Pet Tank 1/3", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)            
             elif pt13_field != f"`Empty`" and pt13_field != user_mention:
@@ -154,7 +153,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             busc_field = embed_dict['fields'][3]['value']
@@ -168,12 +167,12 @@ class RaidsMenu(discord.ui.View):
 
             elif pt2_field == f"`Empty`" and not any(field == user_mention for field in [base_field, busc_field, pt13_field, northcharge_field]):
                 embed.set_field_at(5, name=f"2️⃣ Pet Tank 2", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
             elif pt2_field == user_mention:
                 embed.set_field_at(5, name=f"2️⃣ Pet Tank 2", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)            
             elif pt2_field != f"`Empty`" and pt2_field != user_mention:
@@ -193,7 +192,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             busc_field = embed_dict['fields'][3]['value']
@@ -207,12 +206,12 @@ class RaidsMenu(discord.ui.View):
 
             elif northcharge_field == f"`Empty`" and not any(field == user_mention for field in [base_field, busc_field, pt13_field, pt2_field]):
                 embed.set_field_at(6, name=f"🐶 North Chargers", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
             elif northcharge_field == user_mention:
                 embed.set_field_at(6, name=f"🐶 North Chargers", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)            
             elif northcharge_field != f"`Empty`" and northcharge_field != user_mention:
@@ -232,7 +231,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             mainstun_field = embed_dict['fields'][7]['value']
             bustun_field = embed_dict['fields'][8]['value']
@@ -243,13 +242,13 @@ class RaidsMenu(discord.ui.View):
 
             elif mainstun_field == f"`Empty`" and bustun_field != user_mention:
                 embed.set_field_at(7, name=f"💥 Main Stun", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif mainstun_field == user_mention:
                 embed.set_field_at(7, name=f"💥 Main Stun", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed) 
 
@@ -271,7 +270,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             mainstun_field = embed_dict['fields'][7]['value']
             bustun_field = embed_dict['fields'][8]['value']
@@ -282,13 +281,13 @@ class RaidsMenu(discord.ui.View):
 
             elif bustun_field == f"`Empty`" and mainstun_field != user_mention:
                 embed.set_field_at(8, name=f"⚡ Backup Stun", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif bustun_field == user_mention:
                 embed.set_field_at(8, name=f"⚡ Backup Stun", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed) 
 
@@ -310,7 +309,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northtank_field = embed_dict['fields'][9]['value']
@@ -326,13 +325,13 @@ class RaidsMenu(discord.ui.View):
 
             elif northtank_field == f"`Empty`" and not any(field == user_mention for field in stun5_field[:2]) and not any(field == user_mention for field in [base_field, jelly_field, shark_field, stun0_field]):
                 embed.set_field_at(9, name=f"🐍 North Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif northtank_field == user_mention:
                 embed.set_field_at(9, name=f"🐍 North Tank", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed) 
 
@@ -354,7 +353,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             psntank_field = embed_dict['fields'][10]['value']
@@ -367,13 +366,13 @@ class RaidsMenu(discord.ui.View):
 
             elif psntank_field == "`Empty`" and not any(field == user_mention for field in [base_field, cpr_field, double_field]):
                 embed.set_field_at(10, name=f"🤢 Poison Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif psntank_field == user_mention:
                 embed.set_field_at(10, name=f"🤢 Poison Tank", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -395,7 +394,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             psntank_field = embed_dict['fields'][10]['value']
@@ -408,13 +407,13 @@ class RaidsMenu(discord.ui.View):
 
             elif cpr_field == "`Empty`" and not any(field == user_mention for field in [base_field, psntank_field, double_field]):
                 embed.set_field_at(11, name=f"❤️ CPR", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif cpr_field == user_mention:
                 embed.set_field_at(11, name=f"❤️ CPR", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -436,7 +435,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             psntank_field = embed_dict['fields'][10]['value']
@@ -449,13 +448,13 @@ class RaidsMenu(discord.ui.View):
 
             elif double_field == "`Empty`" and not any(field == user_mention for field in [base_field, psntank_field, cpr_field]):
                 embed.set_field_at(12, name=f"🇩 Double", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif double_field == user_mention:
                 embed.set_field_at(12, name=f"🇩 Double", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -477,7 +476,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northtank_field = embed_dict['fields'][9]['value']
@@ -492,13 +491,13 @@ class RaidsMenu(discord.ui.View):
 
             elif jelly_field == "`Empty`" and not any(field == user_mention for field in stun5_field[:2]) and not any(field == user_mention for field in [base_field, northtank_field, shark_field, stun0_field]):
                 embed.set_field_at(13, name=f"🪼 Jelly Wrangler", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif jelly_field == user_mention:
                 embed.set_field_at(13, name=f"🪼 Jelly Wrangler", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -520,7 +519,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northtank_field = embed_dict['fields'][9]['value']
@@ -535,13 +534,13 @@ class RaidsMenu(discord.ui.View):
 
             elif shark_field == "`Empty`" and not any(field == user_mention for field in stun5_field[:2]) and not any(field == user_mention for field in [base_field, northtank_field, jelly_field, stun0_field]):
                 embed.set_field_at(14, name=f"🦈 Shark 10", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif shark_field == user_mention:
                 embed.set_field_at(14, name=f"🦈 Shark 10", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -563,7 +562,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northtank_field = embed_dict['fields'][9]['value']
@@ -578,13 +577,13 @@ class RaidsMenu(discord.ui.View):
 
             elif stun0_field == "`Empty`" and not any(field == user_mention for field in stun5_field[:2]) and not any(field == user_mention for field in [base_field, northtank_field, jelly_field, shark_field]):
                 embed.set_field_at(15, name=f"0️⃣ Stun 0", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
             elif stun0_field == user_mention:
                 embed.set_field_at(15, name=f"0️⃣ Stun 0", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -606,7 +605,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             northtank_field = embed_dict['fields'][9]['value']
@@ -625,7 +624,7 @@ class RaidsMenu(discord.ui.View):
                 combined_value = "\n".join(stun5_field)
 
                 embed.set_field_at(16, name="5️⃣ Stun 5", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -634,7 +633,7 @@ class RaidsMenu(discord.ui.View):
                 combined_value = "\n".join(stun5_field)
 
                 embed.set_field_at(16, name="5️⃣ Stun 5", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -643,7 +642,7 @@ class RaidsMenu(discord.ui.View):
                 combined_value = "\n".join(stun5_field)
 
                 embed.set_field_at(16, name="5️⃣ Stun 5", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
             
@@ -652,7 +651,7 @@ class RaidsMenu(discord.ui.View):
                 combined_value = "\n".join(stun5_field)
 
                 embed.set_field_at(16, name="5️⃣ Stun 5", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
 
@@ -674,7 +673,7 @@ class RaidsMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             busc_field = embed_dict['fields'][3]['value']
@@ -702,7 +701,7 @@ class RaidsMenu(discord.ui.View):
                 self.remove_user(dps_field, user_mention, user_id)
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(17, name="⚔️ DPS", value=combined_value, inline=False)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -719,7 +718,7 @@ class RaidsMenu(discord.ui.View):
             self.add_user(dps_field, user_mention, user_id)
             combined_value = ", ".join(dps_field)
             embed.set_field_at(17, name="⚔️ DPS", value=combined_value, inline=False)
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/10")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:

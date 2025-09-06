@@ -1,6 +1,6 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
+#from util.functions import get_teamsize
 
 
 class VoragoMenu(discord.ui.View):
@@ -26,7 +26,7 @@ class VoragoMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             bomb_field = embed_dict['fields'][3]['value']
@@ -39,13 +39,13 @@ class VoragoMenu(discord.ui.View):
 
             elif base_field == "`Empty`" and not any(field == user_mention for field in dps_field[:2]) and not any(field == user_mention for field in [tl5_field, bomb_field]):
                 embed.set_field_at(2, name=f"🛡️ Base Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)
 
             elif base_field == user_mention:
                 embed.set_field_at(2, name=f"🛡️ Base Tank", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)  
 
@@ -67,7 +67,7 @@ class VoragoMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             bomb_field = embed_dict['fields'][3]['value']
@@ -80,13 +80,13 @@ class VoragoMenu(discord.ui.View):
 
             elif bomb_field == "`Empty`" and not any(field == user_mention for field in dps_field[:2]) and not any(field == user_mention for field in [base_field, tl5_field]):
                 embed.set_field_at(3, name="💣 Bomb Tank", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)
 
             elif bomb_field == user_mention:
                 embed.set_field_at(3, name="💣 Bomb Tank", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed) 
 
@@ -108,7 +108,7 @@ class VoragoMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             bomb_field = embed_dict['fields'][3]['value']
@@ -121,13 +121,13 @@ class VoragoMenu(discord.ui.View):
 
             elif tl5_field == f"`Empty`" and base_field != user_mention and bomb_field != user_mention and dps_field[0] != user_mention and dps_field[1] != user_mention:
                 embed.set_field_at(4, name="5️⃣ TL5", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)
 
             elif tl5_field == user_mention:
                 embed.set_field_at(4, name="5️⃣ TL5", value=f"`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)   
 
@@ -149,7 +149,7 @@ class VoragoMenu(discord.ui.View):
 
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             bomb_field = embed_dict['fields'][3]['value']
@@ -165,7 +165,7 @@ class VoragoMenu(discord.ui.View):
 
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(5, name="⚔️ DPS", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)   
 
@@ -174,7 +174,7 @@ class VoragoMenu(discord.ui.View):
                 
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(5, name="⚔️ DPS", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)
 
@@ -183,7 +183,7 @@ class VoragoMenu(discord.ui.View):
 
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(5, name="⚔️ DPS", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)
 
@@ -192,7 +192,7 @@ class VoragoMenu(discord.ui.View):
 
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(5, name="⚔️ DPS", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/5")
                 await interaction.response.edit_message(embed=embed)     
 

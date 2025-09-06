@@ -1,12 +1,23 @@
-import discord
-from discord.ui import Modal, TextInput
-import calendar, time
-import pytz
+#region  imports
+# Standard library
+import time
 import random
+import calendar
 from datetime import datetime, timezone
-import humanfriendly
-from util import config, myviews, functions
+
+# Third-party libraries
+import discord
 from discord import TextStyle
+from discord.ui import Modal, TextInput
+import pytz
+import humanfriendly
+
+
+# custom modules
+from util import myviews, config, functions
+
+#endregion
+
 
 
 #region  TimeInputModal

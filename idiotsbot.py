@@ -1,13 +1,16 @@
+#region  imports
+# Standard library
+import asyncio
+
+# Third-party libraries
 import discord
 from discord import app_commands
 import aiosqlite
-import asyncio
-from util import persistence, config, functions, commands, schedules
 
+# custom modules
+from util import config, functions, persistence, commands, schedules
+#endregion
 
-
-asyncio.run(functions.fetch_teams_from_db())
-asyncio.run(functions.fetch_tables_from_db())
 
 BOT_TOKEN = config.BOT_TOKEN
 
@@ -39,18 +42,15 @@ class aclient(discord.Client):
             print(f'{client.user} is online!')
 
             async with self.db.cursor() as cursor:
-                #remove these vv
-                await cursor.execute("CREATE TABLE IF NOT EXISTS bosses (team STRING, level INTEGER, hp INTEGER, guild INTEGER, name STRING, debuff STRING, channel_id INTEGER, stats TEXT)")
-                await cursor.execute("CREATE TABLE IF NOT EXISTS spotlight (days INTEGER, guild INTEGER, boss STRING)")
-                await cursor.execute("CREATE TABLE IF NOT EXISTS exhaustion (username STRING, user INTEGER, attacks INTEGER, exhausted INTEGER, stats TEXT)")
-
-                #Database for events
+                # Database for events
                 await cursor.execute("CREATE TABLE IF NOT EXISTS players (user_id INTEGER, data TEXT, guild INTEGER, UNIQUE(user_id, guild))")
+                await cursor.execute("CREATE TABLE IF NOT EXISTS event (message_id INTEGER, role INTEGER, emoji STRING)")
+                await cursor.execute("CREATE TABLE IF NOT EXISTS event_progress (total INTEGER, guild INTEGER)")
 
-                #User data
+                # User data
                 await cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id INTEGER, data TEXT, guild INTEGER, qotd_points INTEGER, UNIQUE(user_id, guild))")
 
-                #system databases
+                # System databases
                 await cursor.execute("CREATE TABLE IF NOT EXISTS tickets (user INTEGER, guild INTEGER, status STRING)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS voice_channels (channel_id INTEGER, guild INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS react (message_id INTEGER, role INTEGER, emoji STRING)")
@@ -58,7 +58,7 @@ class aclient(discord.Client):
                 await cursor.execute("CREATE TABLE IF NOT EXISTS messages (user INTEGER, username STRING, message_id INTEGER, guild INTEGER, content STRING, created_at INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS animals (animal STRING, guild INTEGER, breed1 STRING, traita1 STRING, traita2 STRING, traita3 STRING, breed2 STRING, traitb1 STRING, traitb2 STRING, traitb3 STRING, owner STRING, lender STRING)")
                 
-                #Question of the day no-repeat and persistence databases
+                # Question of the day no-repeat and persistence databases
                 await cursor.execute("CREATE TABLE IF NOT EXISTS questions (question STRING, guild INTEGER)")
                 await cursor.execute("CREATE TABLE IF NOT EXISTS qotd (message_id STRING, guild INTEGER, tagged TEXT, correct TEXT, difficulty TEXT, results TEXT, answered TEXT, gratz_message_id STRING)")
                 await client.db.commit()
@@ -248,6 +248,7 @@ async def on_raw_reaction_add(payload):
         react_data = {"message_id": message_id, "user_id": user_id, "emoji": emoji, "guild_id": guild_id}
 
         await functions.add_react_role(client, react_data)
+        await functions.event_message(client, react_data)
     except Exception as e:
         print(f"on_raw_reaction_add error: {e}")
 #endregion
@@ -305,7 +306,6 @@ class TaskClass:
     def __init__(self, client):
         self.client = client
         self.give = None
-        self.qotd = None
 
     def start_task(self):
         try:
@@ -321,11 +321,6 @@ class TaskClass:
             return not self.give.done()
         except Exception as e:
             print(f"give_not_done error: {e}")
-    
-    def qotd_not_done(self):
-        if self.qotd is None:
-            return False  # No task has been started
-        return not self.qotd.done()
     
 TaskClass = TaskClass(client)
 

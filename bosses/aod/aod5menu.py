@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 
 class Aod5Menu(discord.ui.View):
@@ -32,7 +31,7 @@ class Aod5Menu(discord.ui.View):
             field_list = [umbra_glacies_field, cruor_fumus_field, hammer_field, sc_field]
 
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
             elif base_field == user_mention:
@@ -47,7 +46,7 @@ class Aod5Menu(discord.ui.View):
                 return
             
             embed.set_field_at(2, name=f"🛡️ Base Tank", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"basebutton error(Aod5Menu): {e}")
@@ -67,7 +66,7 @@ class Aod5Menu(discord.ui.View):
             sc_field = embed_dict['fields'][6]['value']
             field_list = [base_field, cruor_fumus_field, hammer_field, sc_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
             elif umbra_glacies_field == user_mention:
@@ -82,7 +81,7 @@ class Aod5Menu(discord.ui.View):
                 return
             
             embed.set_field_at(3, name=f"🇺 Umbra/Glacies", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"aodumbra_glacies error(Aod5Menu): {e}")
@@ -102,7 +101,7 @@ class Aod5Menu(discord.ui.View):
             sc_field = embed_dict['fields'][6]['value']
             field_list = [base_field, umbra_glacies_field, hammer_field, sc_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
             elif cruor_fumus_field == user_mention:
@@ -117,7 +116,7 @@ class Aod5Menu(discord.ui.View):
                 return
             
             embed.set_field_at(4, name=f"🇨 Cruor/Fumus", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"aodcruor_fumus error(Aod5Menu): {e}")
@@ -137,7 +136,7 @@ class Aod5Menu(discord.ui.View):
             sc_field = embed_dict['fields'][6]['value']
             field_list = [base_field, umbra_glacies_field, cruor_fumus_field, sc_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
             elif hammer_field == user_mention:
@@ -152,7 +151,7 @@ class Aod5Menu(discord.ui.View):
                 return
             
             embed.set_field_at(5, name=f"🔨 Hammer", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"hammerbutton error(Aod5Menu): {e}")
@@ -172,7 +171,7 @@ class Aod5Menu(discord.ui.View):
             sc_field = embed_dict['fields'][6]['value']
             field_list = [base_field, umbra_glacies_field, cruor_fumus_field, hammer_field]
 
-            if len(get_teamsize(embed)) == 5 and user_mention not in get_teamsize(embed):
+            if len(functions.get_teamsize(embed)) == 5 and user_mention not in functions.get_teamsize(embed):
                 await interaction.response.send_message(f"Looks like the team may be full!", ephemeral=True)
                 return
             elif sc_field == user_mention:
@@ -187,7 +186,7 @@ class Aod5Menu(discord.ui.View):
                 return
             
             embed.set_field_at(6, name=f"☁️ Smoke Cloud", value=new_field, inline=True)
-            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(get_teamsize(embed))}/5")
+            embed.set_footer(text=f"Message ID: {interaction.message.id}  •  Team size {len(functions.get_teamsize(embed))}/5")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
             print(f"scbutton error(Aod5Menu): {e}")

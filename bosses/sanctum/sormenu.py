@@ -1,6 +1,5 @@
 import discord
-from util import buttons
-from util.functions import get_teamsize
+from util import buttons, functions
 
 
 
@@ -28,7 +27,7 @@ class SorMenu(discord.ui.View):
             
             message = interaction.message
             embed = message.embeds[0]
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed_dict = embed.to_dict()
             base_field = embed_dict['fields'][2]['value']
             dps_field = embed_dict['fields'][3]['value'].split(", ")
@@ -39,13 +38,13 @@ class SorMenu(discord.ui.View):
 
             elif base_field == "`Empty`" and not any(field == user_mention for field in dps_field[:3]):
                 embed.set_field_at(2, name=f"🛡️ Base", value=user_mention, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
             elif base_field == user_mention:
                 embed.set_field_at(2, name=f"🛡️ Base", value="`Empty`", inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
 
@@ -67,7 +66,7 @@ class SorMenu(discord.ui.View):
             message = interaction.message
             embed = message.embeds[0]
             embed_dict = embed.to_dict()
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             base_field = embed_dict['fields'][2]['value']
             dps_field = embed_dict['fields'][3]['value'].split(", ")
 
@@ -79,7 +78,7 @@ class SorMenu(discord.ui.View):
                 self.remove_user(dps_field, user_mention)
                 combined_value = ", ".join(dps_field)
                 embed.set_field_at(3, name="⚔️ DPS", value=combined_value, inline=True)
-                teamsize = get_teamsize(embed)
+                teamsize = functions.get_teamsize(embed)
                 embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
                 await interaction.response.edit_message(embed=embed)
                 return
@@ -95,7 +94,7 @@ class SorMenu(discord.ui.View):
             self.add_user(dps_field, user_mention)
             combined_value = ", ".join(dps_field)
             embed.set_field_at(3, name="⚔️ DPS", value=combined_value, inline=True)
-            teamsize = get_teamsize(embed)
+            teamsize = functions.get_teamsize(embed)
             embed.set_footer(text=f"Message ID: {message.id}  •  Team size {len(teamsize)}/4")
             await interaction.response.edit_message(embed=embed)
         except Exception as e:
