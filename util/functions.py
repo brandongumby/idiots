@@ -17,11 +17,24 @@ import requests
 from easy_pil import *
 from easy_pil import Editor, Font
 from PIL import Image
+import gspread
+from gspread.utils import rowcol_to_a1
+from gspread_formatting import format_cell_range, CellFormat, TextFormat, Color
+from oauth2client.service_account import ServiceAccountCredentials
+import asyncio
 
 # custom modules
 from util import myviews, config, objects
 #endregion
 
+# Google Sheets setup
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+creds = ServiceAccountCredentials.from_json_keyfile_name("util/service_account.json", scope)
+client = gspread.authorize(creds)
+sheet = client.open("letstrythis").sheet1
 
 #system functions---------------------------
 #region  get_time
@@ -1002,6 +1015,12 @@ async def log_drop(client, player, new_points, message, tier):
 
         new_value = getattr(player.drops, tier)
         setattr(player.drops, tier, new_value + 1)
+
+        drop_data = f"ID: {message.id}\nPoints: {new_points}\nTier: {tier}"
+        
+        value = f'=HYPERLINK("{message.jump_url}", "{drop_data}")'
+
+        await update_drop_sheets(player.name, value, message.id)
     else:
         new_drop_message = await post_drop(channel, new_points, player.id, message)
         player.drops.log[message.id] = {"points": new_points, "drop_id": new_drop_message.id, "tier": tier}
@@ -1012,6 +1031,10 @@ async def log_drop(client, player, new_points, message, tier):
         #add reaction to confirm drop is logged
         emoji = "✅"
         await message.add_reaction(emoji)
+        drop_data = f"ID: {message.id}\nPoints: {new_points}\nTier: {tier}"
+        
+        value = f'=HYPERLINK("{message.jump_url}", "{drop_data}")'
+        await log_drop_sheets(player.name, value)
     await player.save()
 #endregion
 #region  post_drop
@@ -1029,6 +1052,72 @@ async def post_drop(channel, new_points, player_id, message):
     #update main bar view  (function possibly)----------------------------------------------------------------------------
 
     return new_message
+#endregion
+#region  log_drop_sheets
+async def log_drop_sheets(username, drop_data):
+    try:
+        def _write():
+            cell_a1 = None
+            headers = sheet.row_values(1)
+
+            if username not in headers:
+                sheet.update_cell(1, len(headers) + 1, username)
+                col_index = len(headers) + 1
+                cell_a1 = rowcol_to_a1(1, col_index)
+            else:
+                col_index = headers.index(username) + 1
+
+            col_values = sheet.col_values(col_index)
+            next_row = len(col_values) + 1
+
+            sheet.update_cell(next_row, col_index, drop_data)
+            return cell_a1
+
+        fmt = CellFormat(
+            textFormat=TextFormat(bold=True),
+            horizontalAlignment="CENTER",
+        )
+        cell_a1 = await asyncio.to_thread(_write)
+        if cell_a1:
+            await asyncio.to_thread(format_cell_range, sheet, cell_a1, fmt)
+    except Exception as e:
+        print(f"log_drop_sheets error: {e}")
+#endregion
+#region  update_drop_sheets
+async def update_drop_sheets(username, drop_data, drop_id):
+    try:
+        id_query = f"ID: " + str(drop_id)
+        def _write():
+            cell_a1 = None
+            headers = sheet.row_values(1)
+
+            if username not in headers:
+                sheet.update_cell(1, len(headers) + 1, username)
+                col_index = len(headers) + 1
+                cell_a1 = rowcol_to_a1(1, col_index)
+            else:
+                col_index = headers.index(username) + 1
+
+            col_values = sheet.col_values(col_index)
+            for row_index, cell in enumerate(col_values, start=1):
+                if id_query in cell:
+                    sheet.update_cell(row_index, col_index, drop_data)
+                    break
+            else:
+                next_row = len(col_values) + 1
+                sheet.update_cell(next_row, col_index, drop_data)
+
+            return cell_a1
+
+        fmt = CellFormat(
+            textFormat=TextFormat(bold=True),
+            horizontalAlignment="CENTER",
+        )
+        cell_a1 = await asyncio.to_thread(_write)
+        if cell_a1:
+            await asyncio.to_thread(format_cell_range, sheet, cell_a1, fmt)
+    except Exception as e:
+        print(f"update_drop_sheets error: {e}")
 #endregion
 
 

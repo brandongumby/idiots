@@ -28,6 +28,7 @@ from bosses.amascut import amascutmenu, hmamascutmenu
 #endregion
 
 
+# Pof slection menus---------------------
 #region  POFDropdown
 class POFDropdown(discord.ui.Select):
         def __init__(self, client):
@@ -525,6 +526,7 @@ class POFDropdown(discord.ui.Select):
 
 #endregion
 
+# Teamformin selections------------------
 #region  TeamformDropdown
 class TeamformDropdown(discord.ui.Select):
         def __init__(self, client):
@@ -815,6 +817,7 @@ class TeamformDropdown(discord.ui.Select):
             await interaction.message.edit(view=new_view)
 #endregion
 
+# User selections------------------------
 #region  AchievementDropdown
 class AchievementDropdown(discord.ui.Select):
         def __init__(self, client, uncompleted_list, target_user):
@@ -840,7 +843,6 @@ class AchievementDropdown(discord.ui.Select):
             except Exception as e:
                 print(f"AchievementDropdown error: {e}")
 #endregion  
-
 #region  multipage achievement dropdown
 class AchievementDropdownMulti(discord.ui.Select):
         def __init__(self, client, lists_dict, target_user):
@@ -864,6 +866,7 @@ class AchievementDropdownMulti(discord.ui.Select):
                 print(f"AchievementDropdownMulti error: {e}")
 #endregion
 
+# Event Selections-----------------------
 #region  GodsEventSelect
 class GodsEventSelect(discord.ui.Select):
         def __init__(self, client, message):
@@ -885,6 +888,7 @@ class GodsEventSelect(discord.ui.Select):
             self.message = message
 
         async def callback(self, interaction: discord.Interaction):
+#region Tier 1
             if self.values[0] == "Tier 1 Drop":
                 try:
                     tier = "tier1"
@@ -897,6 +901,147 @@ class GodsEventSelect(discord.ui.Select):
                     else:
                         await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
                 except Exception as e:
-                    print(f"t1_gods_event error(GodsEventSelect): {e}")
+                    print(f"Tier 1 Drop error(GodsEventSelect): {e}")
+#endregion
+#region Tier 1 Drop | BUFFED
+            if self.values[0] == "Tier 1 Drop | BUFFED":
+                try:
+                    tier = "tier1"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(250, 1000)
+                        new_points = round(new_points * 1.75)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 1 Drop | BUFFED error(GodsEventSelect): {e}")
+#endregion
+#region Tier 2
+            if self.values[0] == "Tier 2 Drop":
+                try:
+                    tier = "tier2"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(1000, 2000)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 2 Drop error(GodsEventSelect): {e}")
+#endregion
+#region Tier 2 Drop | BUFFED
+            if self.values[0] == "Tier 2 Drop | BUFFED":
+                try:
+                    tier = "tier2"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(1000, 2000)
+                        new_points = round(new_points * 1.75)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 2 Drop | BUFFED error(GodsEventSelect): {e}")
+#endregion
+#region Tier 3
+            if self.values[0] == "Tier 3 Drop":
+                try:
+                    tier = "tier3"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(1500, 3000)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 3 Drop error(GodsEventSelect): {e}")
+#endregion
+#region Tier 3 Drop | BUFFED
+            if self.values[0] == "Tier 3 Drop | BUFFED":
+                try:
+                    tier = "tier3"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(1500, 3000)
+                        new_points = round(new_points * 1.75)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 3 Drop | BUFFED error(GodsEventSelect): {e}")
+#endregion
+#region Tier 4
+            if self.values[0] == "Tier 4 Drop":
+                try:
+                    tier = "tier4"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(2000, 4000)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 4 Drop error(GodsEventSelect): {e}")
+#endregion
+#region Tier Tier 4 Drop | BUFFED
+            if self.values[0] == "Tier 4 Drop | BUFFED":
+                try:
+                    tier = "tier4"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(2000, 4000)
+                        new_points = round(new_points * 1.75)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 4 Drop | BUFFED error(GodsEventSelect): {e}")
+#endregion
+#region Tier 5
+            if self.values[0] == "Tier 5 Drop":
+                try:
+                    tier = "tier5"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(2500, 5000)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 5 Drop error(GodsEventSelect): {e}")
+#endregion
+#region Tier 5 Drop | BUFFED
+            if self.values[0] == "Tier 5 Drop | BUFFED":
+                try:
+                    tier = "tier5"
+                    await interaction.response.defer(ephemeral=True)
+                    if interaction.user.guild_permissions.manage_messages:
+                        player = await functions.load_player(self.client, self.message.author.id, config.GUILD_ID)
+                        new_points = random.randint(2500, 5000)
+                        new_points = round(new_points * 1.75)
+                        await functions.log_drop(self.client, player, new_points, self.message, tier)
+                        await interaction.followup.send("Drop has been logged.", ephemeral=True)
+                    else:
+                        await interaction.followup.send("You don't have permission to use that.", ephemeral=True)
+                except Exception as e:
+                    print(f"Tier 5 Drop | BUFFED error(GodsEventSelect): {e}")
+#endregion
 
 #endregion

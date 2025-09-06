@@ -9,6 +9,9 @@ import requests
 from easy_pil import *
 from easy_pil import Editor, Font
 from PIL import Image
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import asyncio
 
 # custom modules
 from util import myviews, config, functions, achievements, codebox, embeds, modals
@@ -570,12 +573,33 @@ def load_commands(tree, client, TaskClass):
     async def confirm_drop(interaction: discord.Interaction, message: discord.Message):
         await interaction.response.defer(ephemeral=True)
         view=myviews.GodsEventDrops(client, message)
-        
+
         await interaction.followup.send("Select the drop tier", ephemeral=True, view=view)
    
     confirm_drop.default_permissions = discord.Permissions(manage_messages=True)
 #endregion
 
 
+#region test
+    @tree.command(name="test", description="tests")
+    @discord.app_commands.checks.has_permissions(administrator=True)
+    async def test(interaction: discord.Interaction):
+        try:
+            await interaction.response.defer()
+            
+            # Google Sheets setup
+            scope = [
+                "https://spreadsheets.google.com/feeds",
+                "https://www.googleapis.com/auth/drive"
+            ]
+            creds = ServiceAccountCredentials.from_json_keyfile_name("util/service_account.json", scope)
+            client = gspread.authorize(creds)
+            sheet = client.open("testing").sheet1
+            
+            await asyncio.to_thread(sheet.update_acell, "C7", "New Value")
+            await interaction.followup.send("sheet updated")
+        except Exception as e:
+            print(f"test error: {e}")
 
+#endregion
 
